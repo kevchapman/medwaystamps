@@ -1,16 +1,17 @@
 name = "medway-stamps"
-compatibility_date = "2026-08-21"
+compatibility_date = "2025-07-18"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = "dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "medway-stamps-db"
-database_id = "REPLACE_WITH_D1_DATABASE_ID" # from `wrangler d1 create medway-stamps-db`
+database_id = "9c9c36ba-f964-4307-ac89-3fbc24335faa"
+migrations_dir = "db/migrations"
 
 [[r2_buckets]]
 binding = "STAMPS_BUCKET"
 bucket_name = "medway-stamps-images"
 
 [vars]
-SITE_URL = "http://localhost:5173"
+SITE_URL = "http://localhost:8788"

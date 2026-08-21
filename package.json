@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "pages:dev": "wrangler pages dev --proxy 5173 -- npm run dev",
+    "pages:dev": "concurrently -n build,pages -c blue,green \"npm:dev:build-watch\" \"npm:dev:pages\"",
+    "dev:build-watch": "vite build --watch",
+    "dev:pages": "wrangler pages dev dist --live-reload",
     "typecheck": "tsc --noEmit",
     "typecheck:functions": "tsc --noEmit -p functions/tsconfig.json",
     "db:generate": "drizzle-kit generate",
@@ -25,6 +27,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20241127.0",
+    "concurrently": "^9.1.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
