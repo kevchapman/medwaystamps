@@ -15,7 +15,8 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply medway-stamps-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply medway-stamps-db --remote",
-    "db:seed:local": "wrangler d1 execute medway-stamps-db --local --file=./db/seed.sql"
+    "db:seed:local": "wrangler d1 execute medway-stamps-db --local --file=./db/seed.sql",
+    "db:seed:remote": "wrangler d1 execute medway-stamps-db --remote --file=./db/seed.sql"
   },
   "dependencies": {
     "hono": "^4.6.0",
