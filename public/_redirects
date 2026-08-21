@@ -1,0 +1,4 @@
+# Cloudflare Pages: serve the SPA shell for any non-API, non-asset route
+# so React Router can handle client-side routing.
+/api/* /api/:splat 200
+/* /index.html 200
