@@ -124,6 +124,10 @@ app.post("/checkout", async (c) => {
     );
   }
 
+  // Derived from the incoming request rather than a configured var, so this
+  // is correct both in local dev and once deployed without extra setup.
+  const origin = new URL(c.req.url).origin;
+
   const stripe = getStripe(c.env);
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
@@ -138,8 +142,8 @@ app.post("/checkout", async (c) => {
         },
       };
     }),
-    success_url: `${c.env.SITE_URL}/checkout/success`,
-    cancel_url: `${c.env.SITE_URL}/checkout/cancel`,
+    success_url: `${origin}/checkout/success`,
+    cancel_url: `${origin}/checkout/cancel`,
   });
 
   // Reserve the items so a second buyer can't also check them out.

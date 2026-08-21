@@ -65,4 +65,6 @@ Set the real Stripe keys as Pages secrets rather than relying on `.dev.vars`:
 npx wrangler pages secret put STRIPE_SECRET_KEY
 npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
 ```
-And update the `SITE_URL` var in `wrangler.toml` to the deployed Pages URL once known.
+Then add a webhook endpoint in the Stripe dashboard pointing at
+`https://<your-pages-url>/api/webhooks/stripe`, and use *that* endpoint's signing
+secret (not the `stripe listen` one) for `STRIPE_WEBHOOK_SECRET` in production.

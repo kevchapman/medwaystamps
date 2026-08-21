@@ -12,6 +12,3 @@ migrations_dir = "db/migrations"
 [[r2_buckets]]
 binding = "STAMPS_BUCKET"
 bucket_name = "medway-stamps-images"
-
-[vars]
-SITE_URL = "http://localhost:8788"
