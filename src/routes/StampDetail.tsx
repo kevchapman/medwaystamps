@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getStamp } from "../lib/api";
-import { countryCode, formatPrice } from "../lib/format";
+import { formatPrice } from "../lib/format";
 import { useCart } from "../context/CartContext";
 import StampPlate from "../components/StampPlate";
 import ConditionTag from "../components/ConditionTag";
@@ -40,7 +40,7 @@ export default function StampDetail() {
       <div style={{ display: "flex", gap: 80, padding: "48px 64px 100px", alignItems: "flex-start" }}>
         <div style={{ flex: "0 0 420px", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
           <div style={{ background: "var(--paper-alt)", border: "1px solid var(--line)", padding: 40, display: "flex", justifyContent: "center" }}>
-            <StampPlate sgNumber={stamp.sgNumber} countryCode={countryCode(stamp.country)} issueYear={stamp.issueYear} size="lg" />
+            <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} size="lg" />
           </div>
           <div className="serif" style={{ fontSize: 13, fontStyle: "italic", color: "var(--ink-soft)", textAlign: "center" }}>
             {stamp.sgNumber} &middot; shown enlarged

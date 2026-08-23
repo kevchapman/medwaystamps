@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { listStamps } from "../lib/api";
-import { countryCode, formatPrice } from "../lib/format";
+import { formatPrice } from "../lib/format";
 import StampPlate from "../components/StampPlate";
 import ConditionTag from "../components/ConditionTag";
 import type { Stamp } from "../types";
@@ -50,7 +50,7 @@ export default function Home() {
             >
               <StampPlate
                 sgNumber={hero.sgNumber}
-                countryCode={countryCode(hero.country)}
+                era={hero.era}
                 issueYear={hero.issueYear}
                 size="lg"
               />
@@ -91,7 +91,7 @@ export default function Home() {
           <li key={stamp.id}>
             <Link to={`/stamps/${stamp.id}`} className="stamp-card">
               <div className="plate-frame">
-                <StampPlate sgNumber={stamp.sgNumber} countryCode={countryCode(stamp.country)} issueYear={stamp.issueYear} />
+                <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} />
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                 <div className="eyebrow">
