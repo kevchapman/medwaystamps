@@ -55,16 +55,33 @@ This starts the Vite dev server (frontend, hot-reloading) and `wrangler pages de
 
 ## Deploying
 
+Deploys are automatic: **merging a PR into `main` deploys to production** via
+`.github/workflows/deploy.yml`. The workflow, on every push/PR, type-checks and
+builds; on push to `main` specifically it also applies pending D1 migrations and runs
+`wrangler pages deploy`. There's no manual deploy step in normal use — open a PR,
+get it merged, and it ships.
+
+One-time setup for the workflow to be able to deploy: create a Cloudflare API token
+(dashboard → *My Profile → API Tokens → Create Token → Custom token*) scoped to
+this account with **Account / Cloudflare Pages / Edit** and **Account / D1 / Edit**,
+then add it as a GitHub Actions secret:
+```sh
+gh secret set CLOUDFLARE_API_TOKEN
+```
+(paste the token when prompted — this never needs to touch `.dev.vars` or git).
+
+To deploy by hand instead (e.g. debugging the pipeline itself):
 ```sh
 npm run build
-npx wrangler pages deploy dist
+npx wrangler pages deploy dist --project-name=medway-stamps --branch=main
+npx wrangler d1 migrations apply medway-stamps-db --remote
 ```
 
-Set the real Stripe keys as Pages secrets rather than relying on `.dev.vars`:
+Stripe keys are set as Pages secrets, not via the workflow:
 ```sh
 npx wrangler pages secret put STRIPE_SECRET_KEY
 npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
 ```
-Then add a webhook endpoint in the Stripe dashboard pointing at
-`https://<your-pages-url>/api/webhooks/stripe`, and use *that* endpoint's signing
-secret (not the `stripe listen` one) for `STRIPE_WEBHOOK_SECRET` in production.
+The webhook endpoint (`https://<your-pages-url>/api/webhooks/stripe`) is registered
+directly with Stripe, separately from deploys — see the Stripe dashboard's webhooks
+page for the signing secret used above.
