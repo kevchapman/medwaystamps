@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 -12 124 124">
+  <defs>
+    <mask id="fav-back">
+      <rect width="100" height="100" fill="white"/>
+      <circle cx="0" cy="0" r="4.5" fill="black"/><circle cx="14.29" cy="0" r="4.5" fill="black"/><circle cx="28.57" cy="0" r="4.5" fill="black"/><circle cx="42.86" cy="0" r="4.5" fill="black"/><circle cx="57.14" cy="0" r="4.5" fill="black"/><circle cx="71.43" cy="0" r="4.5" fill="black"/><circle cx="85.71" cy="0" r="4.5" fill="black"/><circle cx="100" cy="0" r="4.5" fill="black"/>
+      <circle cx="0" cy="100" r="4.5" fill="black"/><circle cx="14.29" cy="100" r="4.5" fill="black"/><circle cx="28.57" cy="100" r="4.5" fill="black"/><circle cx="42.86" cy="100" r="4.5" fill="black"/><circle cx="57.14" cy="100" r="4.5" fill="black"/><circle cx="71.43" cy="100" r="4.5" fill="black"/><circle cx="85.71" cy="100" r="4.5" fill="black"/><circle cx="100" cy="100" r="4.5" fill="black"/>
+      <circle cx="0" cy="0" r="4.5" fill="black"/><circle cx="0" cy="14.29" r="4.5" fill="black"/><circle cx="0" cy="28.57" r="4.5" fill="black"/><circle cx="0" cy="42.86" r="4.5" fill="black"/><circle cx="0" cy="57.14" r="4.5" fill="black"/><circle cx="0" cy="71.43" r="4.5" fill="black"/><circle cx="0" cy="85.71" r="4.5" fill="black"/><circle cx="0" cy="100" r="4.5" fill="black"/>
+      <circle cx="100" cy="0" r="4.5" fill="black"/><circle cx="100" cy="14.29" r="4.5" fill="black"/><circle cx="100" cy="28.57" r="4.5" fill="black"/><circle cx="100" cy="42.86" r="4.5" fill="black"/><circle cx="100" cy="57.14" r="4.5" fill="black"/><circle cx="100" cy="71.43" r="4.5" fill="black"/><circle cx="100" cy="85.71" r="4.5" fill="black"/><circle cx="100" cy="100" r="4.5" fill="black"/>
+    </mask>
+    <mask id="fav-front">
+      <rect width="100" height="100" fill="white"/>
+      <circle cx="0" cy="0" r="4.5" fill="black"/><circle cx="14.29" cy="0" r="4.5" fill="black"/><circle cx="28.57" cy="0" r="4.5" fill="black"/><circle cx="42.86" cy="0" r="4.5" fill="black"/><circle cx="57.14" cy="0" r="4.5" fill="black"/><circle cx="71.43" cy="0" r="4.5" fill="black"/><circle cx="85.71" cy="0" r="4.5" fill="black"/><circle cx="100" cy="0" r="4.5" fill="black"/>
+      <circle cx="0" cy="100" r="4.5" fill="black"/><circle cx="14.29" cy="100" r="4.5" fill="black"/><circle cx="28.57" cy="100" r="4.5" fill="black"/><circle cx="42.86" cy="100" r="4.5" fill="black"/><circle cx="57.14" cy="100" r="4.5" fill="black"/><circle cx="71.43" cy="100" r="4.5" fill="black"/><circle cx="85.71" cy="100" r="4.5" fill="black"/><circle cx="100" cy="100" r="4.5" fill="black"/>
+      <circle cx="0" cy="0" r="4.5" fill="black"/><circle cx="0" cy="14.29" r="4.5" fill="black"/><circle cx="0" cy="28.57" r="4.5" fill="black"/><circle cx="0" cy="42.86" r="4.5" fill="black"/><circle cx="0" cy="57.14" r="4.5" fill="black"/><circle cx="0" cy="71.43" r="4.5" fill="black"/><circle cx="0" cy="85.71" r="4.5" fill="black"/><circle cx="0" cy="100" r="4.5" fill="black"/>
+      <circle cx="100" cy="0" r="4.5" fill="black"/><circle cx="100" cy="14.29" r="4.5" fill="black"/><circle cx="100" cy="28.57" r="4.5" fill="black"/><circle cx="100" cy="42.86" r="4.5" fill="black"/><circle cx="100" cy="57.14" r="4.5" fill="black"/><circle cx="100" cy="71.43" r="4.5" fill="black"/><circle cx="100" cy="85.71" r="4.5" fill="black"/><circle cx="100" cy="100" r="4.5" fill="black"/>
+    </mask>
+  </defs>
+  <g transform="rotate(-7 50 50) translate(-7,-5)">
+    <rect width="100" height="100" fill="#26372c" mask="url(#fav-back)"/>
+  </g>
+  <g transform="rotate(6 50 50) translate(5,5)">
+    <rect width="100" height="100" fill="#7a3f28" mask="url(#fav-front)"/>
+    <text x="50" y="67" font-family="Georgia, 'Times New Roman', serif" font-size="50" font-weight="600" fill="#e8e2d6" text-anchor="middle">M</text>
+  </g>
+</svg>
