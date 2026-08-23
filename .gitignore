@@ -6,3 +6,7 @@ dist/
 .env.local
 *.log
 .DS_Store
+
+# Design canvas: keep the .dc.html sources + canvas.json, skip the
+# generated seeded payload (large, reproducible via the design skill).
+design/*-direction.html

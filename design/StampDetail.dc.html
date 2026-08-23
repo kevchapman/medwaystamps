@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: oklch(98% 0.008 80);
+      --paper-alt: oklch(95.5% 0.012 75);
+      --ink: oklch(22% 0.02 50);
+      --ink-soft: oklch(45% 0.02 55);
+      --line: oklch(85% 0.01 70);
+      --oxblood: oklch(38% 0.135 25);
+      --oxblood-dark: oklch(30% 0.13 25);
+      --tint-used-bg: oklch(93% 0.025 75);
+      --tint-used-text: oklch(42% 0.07 70);
+      --tint-mint-bg: oklch(93% 0.03 155);
+      --tint-mint-text: oklch(40% 0.08 155);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    a { color: var(--oxblood); text-decoration: none; }
+    a:hover { color: var(--oxblood-dark); }
+    .serif { font-family: 'Spectral', Georgia, 'Times New Roman', serif; }
+    .sans { font-family: 'Work Sans', -apple-system, 'Segoe UI', sans-serif; }
+    .eyebrow { font-family: 'Work Sans', sans-serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+    .btn { display: block; text-align: center; background: var(--oxblood); color: var(--paper); font-family: 'Work Sans', sans-serif; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 18px 32px; }
+    .btn:hover { background: var(--oxblood-dark); color: var(--paper); }
+    .plate { display: flex; flex-direction: column; justify-content: space-between; }
+    .plate-corner { display: flex; justify-content: space-between; font-family: 'Spectral', serif; }
+    .plate-label { text-align: center; font-family: 'Spectral', serif; letter-spacing: 0.08em; }
+    .spec-row { display: flex; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--line); }
+    .tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+  </style>
+</helmet>
+<div class="sans" style="min-height: 100%; background: var(--paper); color: var(--ink);">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 28px 64px; border-bottom: 1px solid var(--line);">
+    <div class="serif" style="font-size: 20px; font-weight: 600; letter-spacing: 0.02em;">Medway Stamps</div>
+    <div style="display: flex; gap: 40px; align-items: center;">
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);">Catalogue</a>
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);">About</a>
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--ink); padding: 8px 16px;">Cart (0)</a>
+    </div>
+  </div>
+
+  <div class="sans" style="padding: 24px 64px 0; font-size: 12px; color: var(--ink-soft);">Catalogue / Victoria / <span style="color: var(--ink);">Penny Black</span></div>
+
+  <div style="display: flex; gap: 80px; padding: 48px 64px 100px; align-items: flex-start;">
+
+    <div style="flex: 0 0 420px; display: flex; flex-direction: column; align-items: center; gap: 20px;">
+      <div style="background: var(--paper-alt); border: 1px solid var(--line); padding: 40px; display: flex; justify-content: center;">
+        <div class="plate" style="width: 280px; height: 360px; background: #1c1a17; padding: 24px;">
+          <div class="plate-corner" style="font-size: 14px; color: #e8e2d6;"><span>1d</span><span>GB</span></div>
+          <svg viewBox="0 0 100 100" width="140" height="140" style="align-self: center;">
+            <path d="M50,10 C41,10 34,17 32,26 C30,32 25,34 22,38 C26,41 30,39 32,43 C30,50 32,58 38,62 L38,84 L68,84 L68,58 C68,48 63,40 58,34 C62,28 60,17 52,12 C51,11 50,10 50,10 Z" fill="#e8e2d6"></path>
+          </svg>
+          <div class="plate-label" style="font-size: 12px; color: #e8e2d6;">ONE PENNY</div>
+        </div>
+      </div>
+      <div class="serif" style="font-size: 13px; font-style: italic; color: var(--ink-soft); text-align: center;">SG 2 &middot; Plate 1a &middot; shown enlarged</div>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 28px; max-width: 480px;">
+      <div style="display: flex; flex-direction: column; gap: 8px;">
+        <div class="eyebrow">Victoria era &middot; issued 1840</div>
+        <h1 class="serif" style="font-size: 40px; font-weight: 500; margin: 0;">Penny Black</h1>
+      </div>
+
+      <p class="serif" style="font-style: italic; font-size: 15px; line-height: 1.7; color: var(--ink-soft); margin: 0;">The world's first adhesive postage stamp, issued 1840 &mdash; the piece that began modern philately.</p>
+
+      <div style="border-top: 1px solid var(--line);">
+        <div class="spec-row"><span class="eyebrow">SG Number</span><span class="sans" style="font-size: 14px;">SG 2</span></div>
+        <div class="spec-row"><span class="eyebrow">Country</span><span class="sans" style="font-size: 14px;">Great Britain</span></div>
+        <div class="spec-row"><span class="eyebrow">Condition</span><span class="tag" style="background: var(--tint-used-bg); color: var(--tint-used-text);">Used</span></div>
+        <div class="spec-row"><span class="eyebrow">Grade</span><span class="sans" style="font-size: 14px;">Fine</span></div>
+      </div>
+
+      <div class="serif" style="font-size: 34px; font-weight: 600; color: var(--oxblood);">&pound;450.00</div>
+
+      <a href="#" class="btn">Add to Collection</a>
+      <div class="sans" style="font-size: 12px; color: var(--ink-soft); text-align: center;">One of one &mdash; once it's gone, it's gone.</div>
+    </div>
+
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

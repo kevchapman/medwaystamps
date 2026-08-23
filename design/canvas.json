@@ -1,0 +1,11 @@
+{
+  "artboards": [
+    { "file": "Main.dc.html", "title": "Home", "x": 0, "y": 0, "w": 1440, "h": 1660 },
+    { "file": "Catalog.dc.html", "title": "Catalog", "x": 1560, "y": 0, "w": 1440, "h": 1560 },
+    { "file": "StampDetail.dc.html", "title": "Stamp Detail", "x": 3120, "y": 0, "w": 1440, "h": 1300 }
+  ],
+  "annotations": [
+    { "id": "direction-note", "x": 0, "y": -160, "w": 460, "text": "Direction: heritage archive meets modern boutique.\nSpectral (serif) + Work Sans; warm paper tones; oxblood accent.\nStamps shown as illustrated \"specimen plates\" (placeholder for real photography) mounted like museum catalogue cards." }
+  ],
+  "launch": { "view": "canvas" }
+}

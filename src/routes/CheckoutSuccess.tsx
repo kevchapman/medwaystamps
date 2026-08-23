@@ -12,10 +12,17 @@ export default function CheckoutSuccess() {
   }, [clear]);
 
   return (
-    <section>
-      <h1>Thank you!</h1>
-      <p>Your order was placed successfully (test mode).</p>
-      <Link to="/catalog">Continue browsing</Link>
+    <section style={{ padding: "96px 64px", textAlign: "center" }}>
+      <div className="eyebrow">Order confirmed</div>
+      <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: "8px 0 16px" }}>
+        Thank you
+      </h1>
+      <p style={{ color: "var(--ink-soft)", maxWidth: 420, margin: "0 auto 32px" }}>
+        Your order was placed successfully (test mode). It's now yours &mdash; one of one.
+      </p>
+      <Link to="/catalog" className="btn">
+        Continue Browsing
+      </Link>
     </section>
   );
 }

@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: oklch(98% 0.008 80);
+      --paper-alt: oklch(95.5% 0.012 75);
+      --ink: oklch(22% 0.02 50);
+      --ink-soft: oklch(45% 0.02 55);
+      --line: oklch(85% 0.01 70);
+      --oxblood: oklch(38% 0.135 25);
+      --oxblood-dark: oklch(30% 0.13 25);
+      --tint-used-bg: oklch(93% 0.025 75);
+      --tint-used-text: oklch(42% 0.07 70);
+      --tint-mint-bg: oklch(93% 0.03 155);
+      --tint-mint-text: oklch(40% 0.08 155);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; }
+    a { color: var(--oxblood); text-decoration: none; }
+    a:hover { color: var(--oxblood-dark); }
+    .serif { font-family: 'Spectral', Georgia, 'Times New Roman', serif; }
+    .sans { font-family: 'Work Sans', -apple-system, 'Segoe UI', sans-serif; }
+    .eyebrow { font-family: 'Work Sans', sans-serif; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+    .btn { display: inline-block; background: var(--oxblood); color: var(--paper); font-family: 'Work Sans', sans-serif; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; padding: 16px 32px; }
+    .btn:hover { background: var(--oxblood-dark); color: var(--paper); }
+    .plate { display: flex; flex-direction: column; justify-content: space-between; }
+    .plate-corner { display: flex; justify-content: space-between; font-family: 'Spectral', serif; }
+    .plate-label { text-align: center; font-family: 'Spectral', serif; letter-spacing: 0.08em; }
+    .tag { display: inline-block; font-family: 'Work Sans', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 8px; border-radius: 2px; }
+    .desc { font-family: 'Work Sans', sans-serif; font-size: 13px; line-height: 1.5; color: var(--ink-soft); margin: 0; }
+  </style>
+</helmet>
+<div class="sans" style="min-height: 100%; background: var(--paper); color: var(--ink);">
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 28px 64px; border-bottom: 1px solid var(--line);">
+    <div class="serif" style="font-size: 20px; font-weight: 600; letter-spacing: 0.02em;">Medway Stamps</div>
+    <div style="display: flex; gap: 40px; align-items: center;">
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);">Catalogue</a>
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink);">About</a>
+      <a href="#" class="sans" style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); border: 1px solid var(--ink); padding: 8px 16px;">Cart (0)</a>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 80px; padding: 96px 64px 88px; align-items: center;">
+    <div style="flex: 0 0 460px; display: flex; flex-direction: column; gap: 24px;">
+      <div class="eyebrow">Est. for the serious collector</div>
+      <h1 class="serif" style="font-size: 52px; line-height: 1.1; font-weight: 500; margin: 0; color: var(--ink);">Rare British stamps, authenticated and ready to own.</h1>
+      <p class="sans" style="font-size: 16px; line-height: 1.65; color: var(--ink-soft); margin: 0; max-width: 420px;">Each piece in the collection is a single, verified original — catalogued, graded and sold once. No reprints, no duplicates.</p>
+      <div><a href="#" class="btn">Browse the Catalogue</a></div>
+    </div>
+
+    <div style="flex: 1; display: flex; justify-content: center;">
+      <div style="transform: rotate(-3deg); background: var(--paper-alt); border: 1px solid var(--line); padding: 28px; box-shadow: 0 32px 56px -28px oklch(22% 0.02 50 / 0.35);">
+        <div class="plate" style="width: 260px; height: 320px; background: #1c1a17; padding: 20px;">
+          <div class="plate-corner" style="font-size: 13px; color: #e8e2d6;"><span>1d</span><span>GB</span></div>
+          <svg viewBox="0 0 100 100" width="110" height="110" style="align-self: center;">
+            <path d="M50,10 C41,10 34,17 32,26 C30,32 25,34 22,38 C26,41 30,39 32,43 C30,50 32,58 38,62 L38,84 L68,84 L68,58 C68,48 63,40 58,34 C62,28 60,17 52,12 C51,11 50,10 50,10 Z" fill="#e8e2d6"></path>
+          </svg>
+          <div class="plate-label" style="font-size: 11px; color: #e8e2d6;">ONE PENNY</div>
+        </div>
+        <div class="serif" style="margin-top: 16px; font-size: 13px; font-style: italic; color: var(--ink-soft); text-align: center;">SG 2 &middot; Plate 1a</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding: 0 64px 24px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--line); padding-top: 48px;">
+    <div class="eyebrow">Recently acquired</div>
+    <h2 class="serif" style="font-size: 30px; font-weight: 500; margin: 0;">New to the collection</h2>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; padding: 24px 64px 100px;">
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: var(--paper-alt); border: 1px solid var(--line); padding: 24px; display: flex; justify-content: center;">
+        <div class="plate" style="width: 140px; height: 180px; background: #1c1a17; padding: 12px;">
+          <div class="plate-corner" style="font-size: 9px; color: #e8e2d6;"><span>1d</span><span>GB</span></div>
+          <svg viewBox="0 0 100 100" width="60" height="60" style="align-self: center;">
+            <path d="M50,10 C41,10 34,17 32,26 C30,32 25,34 22,38 C26,41 30,39 32,43 C30,50 32,58 38,62 L38,84 L68,84 L68,58 C68,48 63,40 58,34 C62,28 60,17 52,12 C51,11 50,10 50,10 Z" fill="#e8e2d6"></path>
+          </svg>
+          <div class="plate-label" style="font-size: 8px; color: #e8e2d6;">ONE PENNY</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div class="eyebrow">Victoria &middot; 1840</div>
+        <div class="serif" style="font-size: 18px; font-weight: 500;">Penny Black</div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">SG 2</span>
+          <span class="tag" style="background: var(--tint-used-bg); color: var(--tint-used-text);">Used</span>
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">Fine</span>
+        </div>
+        <p class="desc">The world's first adhesive postage stamp, issued 1840.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div class="serif" style="font-size: 18px; font-weight: 600; color: var(--oxblood);">&pound;450.00</div>
+          <a href="#" class="sans" style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">View &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: var(--paper-alt); border: 1px solid var(--line); padding: 24px; display: flex; justify-content: center;">
+        <div class="plate" style="width: 140px; height: 180px; background: #1e3a5f; padding: 12px;">
+          <div class="plate-corner" style="font-size: 9px; color: #e8e2d6;"><span>2d</span><span>GB</span></div>
+          <svg viewBox="0 0 100 100" width="60" height="60" style="align-self: center;">
+            <path d="M50,10 C41,10 34,17 32,26 C30,32 25,34 22,38 C26,41 30,39 32,43 C30,50 32,58 38,62 L38,84 L68,84 L68,58 C68,48 63,40 58,34 C62,28 60,17 52,12 C51,11 50,10 50,10 Z" fill="#e8e2d6"></path>
+          </svg>
+          <div class="plate-label" style="font-size: 8px; color: #e8e2d6;">TWO PENCE</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div class="eyebrow">Victoria &middot; 1840</div>
+        <div class="serif" style="font-size: 18px; font-weight: 500;">Two Pence Blue</div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">SG 5</span>
+          <span class="tag" style="background: var(--tint-used-bg); color: var(--tint-used-text);">Used</span>
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">Good</span>
+        </div>
+        <p class="desc">Companion issue to the Penny Black, same year.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div class="serif" style="font-size: 18px; font-weight: 600; color: var(--oxblood);">&pound;620.00</div>
+          <a href="#" class="sans" style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">View &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div style="background: var(--paper-alt); border: 1px solid var(--line); padding: 24px; display: flex; justify-content: center;">
+        <div class="plate" style="width: 140px; height: 180px; background: #26372c; padding: 12px;">
+          <div class="plate-corner" style="font-size: 9px; color: #e8e2d6;"><span>&pound;1</span><span>GB</span></div>
+          <svg viewBox="0 0 100 100" width="60" height="60" style="align-self: center;">
+            <path d="M50,10 C41,10 34,17 32,26 C30,32 25,34 22,38 C26,41 30,39 32,43 C30,50 32,58 38,62 L38,84 L68,84 L68,58 C68,48 63,40 58,34 C62,28 60,17 52,12 C51,11 50,10 50,10 Z" fill="#e8e2d6"></path>
+          </svg>
+          <div class="plate-label" style="font-size: 8px; color: #e8e2d6;">P.U.C.</div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <div class="eyebrow">George V &middot; 1929</div>
+        <div class="serif" style="font-size: 18px; font-weight: 500;">1929 PUC &pound;1</div>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">SG 438</span>
+          <span class="tag" style="background: var(--tint-mint-bg); color: var(--tint-mint-text);">Mint</span>
+          <span class="sans" style="font-size: 13px; color: var(--ink-soft);">Very Fine</span>
+        </div>
+        <p class="desc">Postal Union Congress high value, seal of the Congress.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+          <div class="serif" style="font-size: 18px; font-weight: 600; color: var(--oxblood);">&pound;1,850.00</div>
+          <a href="#" class="sans" style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;">View &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div style="border-top: 1px solid var(--line); padding: 32px 64px; display: flex; justify-content: space-between; align-items: center;">
+    <div class="sans" style="font-size: 12px; color: var(--ink-soft);">Medway Stamps &mdash; Rare &amp; Collectible British Philately</div>
+    <div style="display: flex; gap: 24px;">
+      <a href="#" class="sans" style="font-size: 12px; color: var(--ink-soft);">Catalogue</a>
+      <a href="#" class="sans" style="font-size: 12px; color: var(--ink-soft);">About</a>
+      <a href="#" class="sans" style="font-size: 12px; color: var(--ink-soft);">Contact</a>
+    </div>
+  </div>
+
+</div>
+</x-dc>
+</body>
+</html>

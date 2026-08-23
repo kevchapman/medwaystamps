@@ -12,10 +12,16 @@ export default function App() {
 
   return (
     <div className="app">
-      <nav>
-        <Link to="/">Medway Stamps</Link>
-        <Link to="/catalog">Catalog</Link>
-        <Link to="/cart">Cart ({lines.length})</Link>
+      <nav className="site-nav">
+        <Link to="/" className="wordmark">
+          Medway Stamps
+        </Link>
+        <div className="links">
+          <Link to="/catalog">Catalogue</Link>
+          <Link to="/cart" className="cart-link">
+            Cart ({lines.length})
+          </Link>
+        </div>
       </nav>
 
       <main>
@@ -28,6 +34,8 @@ export default function App() {
           <Route path="/checkout/cancel" element={<CheckoutCancel />} />
         </Routes>
       </main>
+
+      <footer className="site-footer">Medway Stamps &mdash; Rare &amp; Collectible British Philately</footer>
     </div>
   );
 }
