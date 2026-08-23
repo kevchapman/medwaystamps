@@ -6,6 +6,7 @@ import Cart from "./routes/Cart";
 import CheckoutSuccess from "./routes/CheckoutSuccess";
 import CheckoutCancel from "./routes/CheckoutCancel";
 import { useCart } from "./context/CartContext";
+import Logo from "./components/Logo";
 
 export default function App() {
   const { lines } = useCart();
@@ -14,6 +15,7 @@ export default function App() {
     <div className="app">
       <nav className="site-nav">
         <Link to="/" className="wordmark">
+          <Logo size={32} />
           Medway Stamps
         </Link>
         <div className="links">
