@@ -1,11 +1,17 @@
 {
   "artboards": [
-    { "file": "Main.dc.html", "title": "Home", "x": 0, "y": 0, "w": 1440, "h": 1660 },
-    { "file": "Catalog.dc.html", "title": "Catalog", "x": 1560, "y": 0, "w": 1440, "h": 1560 },
-    { "file": "StampDetail.dc.html", "title": "Stamp Detail", "x": 3120, "y": 0, "w": 1440, "h": 1300 }
+    { "file": "Main.dc.html", "title": "Home", "x": 0, "y": 0, "w": 1440, "h": 1660, "page": "page-1" },
+    { "file": "Catalog.dc.html", "title": "Catalog", "x": 1560, "y": 0, "w": 1440, "h": 1560, "page": "page-1" },
+    { "file": "StampDetail.dc.html", "title": "Stamp Detail", "x": 3120, "y": 0, "w": 1440, "h": 1300, "page": "page-1" },
+    { "file": "LogoOptions.dc.html", "title": "Logo Options", "x": 0, "y": 0, "w": 1440, "h": 900, "page": "page-2" }
   ],
   "annotations": [
-    { "id": "direction-note", "x": 0, "y": -160, "w": 460, "text": "Direction: heritage archive meets modern boutique.\nSpectral (serif) + Work Sans; warm paper tones; oxblood accent.\nStamps shown as illustrated \"specimen plates\" (placeholder for real photography) mounted like museum catalogue cards." }
+    { "id": "direction-note", "x": 0, "y": -160, "w": 460, "page": "page-1", "text": "Direction: heritage archive meets modern boutique.\nSpectral (serif) + Work Sans; warm paper tones; oxblood accent.\nStamps shown as illustrated \"specimen plates\" (placeholder for real photography) mounted like museum catalogue cards." },
+    { "id": "logo-note", "x": 0, "y": -140, "w": 460, "page": "page-2", "text": "Three directions for a standalone mark, all extending the perforated specimen-plate motif already live on the site. Pick one (or mix elements) and I'll build it into the real favicon + nav lockup." }
   ],
-  "launch": { "view": "canvas" }
+  "pages": [
+    { "id": "page-1", "name": "Screens" },
+    { "id": "page-2", "name": "Logo" }
+  ],
+  "launch": { "view": "canvas", "page": "page-2" }
 }
