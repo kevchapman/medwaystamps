@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listStamps } from "../lib/api";
-import { formatPrice } from "../lib/format";
-import StampPlate from "../components/StampPlate";
-import ConditionTag from "../components/ConditionTag";
+import StampGrid from "../components/StampGrid";
 import type { Stamp, StampCondition } from "../types";
+import styles from "./Catalog.module.scss";
 
 const CONDITIONS: StampCondition[] = ["mint", "mounted_mint", "used", "fine_used"];
 const CONDITION_LABELS: Record<StampCondition, string> = {
@@ -46,13 +45,11 @@ export default function Catalog() {
 
   return (
     <section>
-      <div style={{ padding: "56px 64px 32px", display: "flex", flexDirection: "column", gap: 20 }}>
+      <div className={styles.header}>
         <div className="eyebrow">The catalogue</div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: 0 }}>
-            All stamps
-          </h1>
-          <div style={{ fontSize: 13, color: "var(--ink-soft)" }}>
+        <div className={styles.headerRow}>
+          <h1 className={`serif page-title ${styles.headerTitle}`}>All stamps</h1>
+          <div className={styles.count}>
             {loading ? "Searching…" : `${total} stamp${total === 1 ? "" : "s"} found`}
           </div>
         </div>
@@ -60,11 +57,10 @@ export default function Catalog() {
         <form onSubmit={(e) => e.preventDefault()} className="filters">
           <input
             type="search"
-            className="field"
+            className={`field ${styles.searchField}`}
             placeholder="Search by title, SG number..."
             value={q}
             onChange={(e) => updateParam("q", e.target.value)}
-            style={{ flex: 1, minWidth: 240 }}
           />
           <select className="field" value={era} onChange={(e) => updateParam("era", e.target.value)}>
             <option value="">Any era</option>
@@ -89,41 +85,9 @@ export default function Catalog() {
         </form>
       </div>
 
-      {error && (
-        <p role="alert" style={{ padding: "0 64px" }}>
-          Couldn't load stamps: {error}
-        </p>
-      )}
+      {error && <p role="alert">Couldn't load stamps: {error}</p>}
 
-      <ul className="stamp-grid" style={{ padding: "24px 64px 100px" }}>
-        {items.map((stamp) => (
-          <li key={stamp.id}>
-            <Link to={`/stamps/${stamp.id}`} className="stamp-card">
-              <div className="plate-frame">
-                <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div className="eyebrow">
-                  {stamp.era} &middot; {stamp.issueYear}
-                </div>
-                <div className="serif" style={{ fontSize: 18, fontWeight: 500 }}>
-                  {stamp.title}
-                </div>
-                <div className="meta-row">
-                  <span>{stamp.sgNumber}</span>
-                  <ConditionTag condition={stamp.condition} />
-                  {stamp.grade && <span>{stamp.grade}</span>}
-                </div>
-                <p className="desc">{stamp.description}</p>
-                <div className="price-row">
-                  <span className="price">{formatPrice(stamp.pricePence)}</span>
-                  <span className="view-link">View &rarr;</span>
-                </div>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <StampGrid stamps={items} />
     </section>
   );
 }

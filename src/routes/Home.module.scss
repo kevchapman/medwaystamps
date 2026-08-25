@@ -1,0 +1,73 @@
+// Layout for the Home route only. Shared visual elements (.serif, .eyebrow,
+// .btn, .stamp-grid, .stamp-card, ...) stay in src/index.css — this file is
+// just the one-off structure that used to live as inline styles. Horizontal
+// page inset comes from <main>'s padding (src/index.css) — sections here
+// only ever add vertical padding.
+
+.hero {
+  display: flex;
+  gap: 80px;
+  padding: 96px 0 88px;
+  align-items: center;
+}
+
+.heroCopy {
+  flex: 0 0 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.heroTitle {
+  font-size: 52px;
+  line-height: 1.1;
+  font-weight: 500;
+  margin: 0;
+}
+
+.heroLede {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin: 0;
+  max-width: 420px;
+}
+
+.heroPlateWrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.heroPlate {
+  transform: rotate(-3deg);
+  background: var(--paper-alt);
+  border: 1px solid var(--line);
+  padding: 28px;
+  box-shadow: 0 32px 56px -28px oklch(22% 0.02 50 / 0.35);
+
+  .heroPlateCaption {
+    margin-top: 16px;
+  }
+}
+
+.heroPlateCaption {
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+.sectionHeading {
+  padding: 48px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.sectionTitle {
+  font-size: 30px;
+  font-weight: 500;
+  margin: 0;
+}

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { createCheckoutSession } from "../lib/api";
 import { formatPrice } from "../lib/format";
+import styles from "./Cart.module.scss";
 
 export default function Cart() {
   const { lines, removeLine, totalPence } = useCart();
@@ -25,12 +26,10 @@ export default function Cart() {
 
   if (lines.length === 0) {
     return (
-      <section style={{ padding: "56px 64px 100px" }}>
+      <section className={styles.empty}>
         <div className="eyebrow">Your cart</div>
-        <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: "8px 0 24px" }}>
-          Nothing here yet
-        </h1>
-        <p style={{ color: "var(--ink-soft)" }}>
+        <h1 className={`serif page-title ${styles.emptyTitle}`}>Nothing here yet</h1>
+        <p className={styles.emptyText}>
           <Link to="/catalog">Browse the catalogue</Link> to find your next piece.
         </p>
       </section>
@@ -38,35 +37,21 @@ export default function Cart() {
   }
 
   return (
-    <section style={{ padding: "56px 64px 100px", maxWidth: 640 }}>
+    <section className={styles.page}>
       <div className="eyebrow">Your cart</div>
-      <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: "8px 0 32px" }}>
+      <h1 className={`serif page-title ${styles.pageTitle}`}>
         {lines.length} item{lines.length === 1 ? "" : "s"}
       </h1>
 
       <div className="spec-list">
         {lines.map((line) => (
           <div key={line.stampId} className="spec-row">
-            <span className="serif" style={{ fontSize: 16 }}>
-              {line.title}
-            </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-              <span className="serif" style={{ fontWeight: 600, color: "var(--oxblood)" }}>
+            <span className={`serif ${styles.lineTitle}`}>{line.title}</span>
+            <div className={styles.lineRight}>
+              <span className={`serif ${styles.linePrice}`}>
                 {formatPrice(line.pricePence * line.quantity)}
               </span>
-              <button
-                onClick={() => removeLine(line.stampId)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "var(--ink-soft)",
-                  fontSize: 12,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                  padding: 0,
-                }}
-              >
+              <button onClick={() => removeLine(line.stampId)} className={styles.removeBtn}>
                 Remove
               </button>
             </div>
@@ -74,27 +59,18 @@ export default function Cart() {
         ))}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "baseline",
-          margin: "28px 0",
-        }}
-      >
+      <div className={styles.totalRow}>
         <span className="eyebrow">Total</span>
-        <span className="serif" style={{ fontSize: 28, fontWeight: 600, color: "var(--oxblood)" }}>
-          {formatPrice(totalPence)}
-        </span>
+        <span className={`serif ${styles.totalValue}`}>{formatPrice(totalPence)}</span>
       </div>
 
       {error && (
-        <p role="alert" style={{ color: "var(--oxblood)" }}>
+        <p role="alert" className={styles.error}>
           Checkout failed: {error}
         </p>
       )}
 
-      <button className="btn" onClick={handleCheckout} disabled={submitting} style={{ width: "100%" }}>
+      <button className={`btn ${styles.checkoutBtn}`} onClick={handleCheckout} disabled={submitting}>
         {submitting ? "Redirecting to Stripe…" : "Checkout"}
       </button>
     </section>

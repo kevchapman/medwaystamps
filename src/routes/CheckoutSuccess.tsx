@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import CheckoutStatusPanel from "../components/CheckoutStatusPanel";
 
 export default function CheckoutSuccess() {
   const { clear } = useCart();
@@ -12,17 +12,14 @@ export default function CheckoutSuccess() {
   }, [clear]);
 
   return (
-    <section style={{ padding: "96px 64px", textAlign: "center" }}>
-      <div className="eyebrow">Order confirmed</div>
-      <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: "8px 0 16px" }}>
-        Thank you
-      </h1>
-      <p style={{ color: "var(--ink-soft)", maxWidth: 420, margin: "0 auto 32px" }}>
-        Your order was placed successfully (test mode). It's now yours &mdash; one of one.
-      </p>
-      <Link to="/catalog" className="btn">
-        Continue Browsing
-      </Link>
-    </section>
+    <CheckoutStatusPanel
+      eyebrow="Order confirmed"
+      title="Thank you"
+      message={
+        <>Your order was placed successfully (test mode). It's now yours &mdash; one of one.</>
+      }
+      actionTo="/catalog"
+      actionLabel="Continue Browsing"
+    />
   );
 }
