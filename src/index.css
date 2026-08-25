@@ -149,8 +149,14 @@ a:hover {
   padding: 8px 16px;
 }
 
+/* Same split as .site-nav above: the bar is full-bleed (border-top),
+   the inner wrapper caps content to the page max-width/gutter. */
 .site-footer {
   border-top: 1px solid var(--line);
+}
+.site-footer__inner {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
   padding: 32px var(--page-padding-x);
   font-size: 12px;
   color: var(--ink-soft);

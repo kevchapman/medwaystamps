@@ -39,7 +39,11 @@ export default function App() {
         </Routes>
       </main>
 
-      <footer className="site-footer">Medway Stamps &mdash; Rare &amp; Collectible British Philately</footer>
+      <footer className="site-footer">
+        <div className="site-footer__inner">
+          Medway Stamps &mdash; Rare &amp; Collectible British Philately
+        </div>
+      </footer>
     </div>
   );
 }
