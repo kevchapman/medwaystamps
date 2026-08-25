@@ -1,12 +1,14 @@
 // Layout for the StampDetail route only. Shared visual elements (.serif,
 // .eyebrow, .btn, .spec-list, .spec-row, ...) stay in src/index.css.
+// Horizontal page inset comes from <main>'s padding (src/index.css) —
+// sections here only ever add vertical padding.
 
 .status {
-  padding: 24px 64px;
+  padding: 24px 0;
 }
 
 .breadcrumb {
-  padding: 24px 64px 0;
+  padding: 24px 0 0;
   font-size: 12px;
   color: var(--ink-soft);
 
@@ -18,7 +20,7 @@
 .layout {
   display: flex;
   gap: 80px;
-  padding: 48px 64px 100px;
+  padding: 48px 0 100px;
   align-items: flex-start;
 }
 

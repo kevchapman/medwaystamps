@@ -6,12 +6,14 @@ import styles from "./StampGrid.module.scss";
 // Catalog (search results).
 export default function StampGrid({ stamps }: { stamps: Stamp[] }) {
   return (
-    <ul className={`stamp-grid ${styles.grid}`}>
-      {stamps.map((stamp) => (
-        <li key={stamp.id}>
-          <StampCard stamp={stamp} />
-        </li>
-      ))}
-    </ul>
+    <div className={styles.wrap}>
+      <ul className="stamp-grid">
+        {stamps.map((stamp) => (
+          <li key={stamp.id}>
+            <StampCard stamp={stamp} />
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

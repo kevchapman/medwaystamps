@@ -1,5 +1,7 @@
+// Horizontal page inset comes from <main>'s padding (src/index.css) —
+// this only ever adds vertical padding.
 .panel {
-  padding: 96px 64px;
+  padding: 96px 0;
   text-align: center;
 }
 

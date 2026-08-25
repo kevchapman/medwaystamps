@@ -85,11 +85,7 @@ export default function Catalog() {
         </form>
       </div>
 
-      {error && (
-        <p role="alert" className={styles.error}>
-          Couldn't load stamps: {error}
-        </p>
-      )}
+      {error && <p role="alert">Couldn't load stamps: {error}</p>}
 
       <StampGrid stamps={items} />
     </section>

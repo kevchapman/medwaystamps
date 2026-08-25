@@ -57,11 +57,7 @@ export default function Home() {
         <h2 className={`serif ${styles.sectionTitle}`}>New to the collection</h2>
       </div>
 
-      {error && (
-        <p role="alert" className={styles.error}>
-          Couldn't load stamps: {error}
-        </p>
-      )}
+      {error && <p role="alert">Couldn't load stamps: {error}</p>}
 
       <StampGrid stamps={featured} />
     </section>

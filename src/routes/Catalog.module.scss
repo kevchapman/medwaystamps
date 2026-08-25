@@ -1,9 +1,10 @@
 // Layout for the Catalog route only. Shared visual elements (.serif,
 // .eyebrow, .field, .filters, .stamp-grid, .stamp-card, ...) stay in
-// src/index.css.
+// src/index.css. Horizontal page inset comes from <main>'s padding
+// (src/index.css) — sections here only ever add vertical padding.
 
 .header {
-  padding: 56px 64px 32px;
+  padding: 56px 0 32px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -27,8 +28,4 @@
 .searchField {
   flex: 1;
   min-width: 240px;
-}
-
-.error {
-  padding: 0 64px;
 }

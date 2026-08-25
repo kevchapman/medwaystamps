@@ -1,11 +1,13 @@
 // Layout for the Home route only. Shared visual elements (.serif, .eyebrow,
 // .btn, .stamp-grid, .stamp-card, ...) stay in src/index.css — this file is
-// just the one-off structure that used to live as inline styles.
+// just the one-off structure that used to live as inline styles. Horizontal
+// page inset comes from <main>'s padding (src/index.css) — sections here
+// only ever add vertical padding.
 
 .hero {
   display: flex;
   gap: 80px;
-  padding: 96px 64px 88px;
+  padding: 96px 0 88px;
   align-items: center;
 }
 
@@ -57,7 +59,7 @@
 }
 
 .sectionHeading {
-  padding: 48px 64px 24px;
+  padding: 48px 0 24px;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -68,8 +70,4 @@
   font-size: 30px;
   font-weight: 500;
   margin: 0;
-}
-
-.error {
-  padding: 0 64px;
 }

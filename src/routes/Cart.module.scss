@@ -1,8 +1,10 @@
 // Layout for the Cart route only. Shared visual elements (.serif, .eyebrow,
-// .btn, .spec-list, .spec-row, ...) stay in src/index.css.
+// .btn, .spec-list, .spec-row, ...) stay in src/index.css. Horizontal page
+// inset comes from <main>'s padding (src/index.css) — sections here only
+// ever add vertical padding.
 
 .empty {
-  padding: 56px 64px 100px;
+  padding: 56px 0 100px;
 }
 
 .emptyTitle {
@@ -14,7 +16,7 @@
 }
 
 .page {
-  padding: 56px 64px 100px;
+  padding: 56px 0 100px;
   max-width: 640px;
 }
 

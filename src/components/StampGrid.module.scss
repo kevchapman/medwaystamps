@@ -1,3 +1,7 @@
-.grid {
-  padding: 24px 64px 100px;
+// Vertical section spacing only — horizontal inset comes from <main>'s
+// padding-inline (see src/index.css). This lives on a wrapper div rather
+// than the <ul> itself so it never has to compete with .stamp-grid's own
+// padding/margin reset on the same element.
+.wrap {
+  padding: 24px 0 100px;
 }

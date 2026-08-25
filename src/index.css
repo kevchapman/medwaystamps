@@ -14,6 +14,8 @@
   --tint-mint-text: oklch(40% 0.08 155);
   --font-serif: "Spectral", Georgia, "Times New Roman", serif;
   --font-sans: "Work Sans", -apple-system, "Segoe UI", sans-serif;
+  --page-max-width: 1280px;
+  --page-padding-x: 64px;
 }
 
 * {
@@ -109,7 +111,7 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 28px 64px;
+  padding: 28px var(--page-padding-x);
   border-bottom: 1px solid var(--line);
 }
 .site-nav .wordmark {
@@ -141,14 +143,19 @@ a:hover {
 
 .site-footer {
   border-top: 1px solid var(--line);
-  padding: 32px 64px;
+  padding: 32px var(--page-padding-x);
   font-size: 12px;
   color: var(--ink-soft);
 }
 
+/* The one place page horizontal inset and max-width are set. Routes and
+   the components they render should only ever add vertical padding —
+   never repeat this 64px gutter themselves — so this stays the single
+   source of truth for both. */
 main {
-  max-width: 1280px;
+  max-width: var(--page-max-width);
   margin: 0 auto;
+  padding-inline: var(--page-padding-x);
 }
 
 /* Stamp grid + card */
