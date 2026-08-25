@@ -1,0 +1,19 @@
+// Layout for the CheckoutCancel route only. Shared visual elements
+// (.serif, .eyebrow, .btn) stay in src/index.css.
+
+.panel {
+  padding: 96px 64px;
+  text-align: center;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 500;
+  margin: 8px 0 16px;
+}
+
+.lede {
+  color: var(--ink-soft);
+  max-width: 420px;
+  margin: 0 auto 32px;
+}

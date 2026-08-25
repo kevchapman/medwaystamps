@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import styles from "./CheckoutSuccess.module.scss";
 
 export default function CheckoutSuccess() {
   const { clear } = useCart();
@@ -12,12 +13,10 @@ export default function CheckoutSuccess() {
   }, [clear]);
 
   return (
-    <section style={{ padding: "96px 64px", textAlign: "center" }}>
+    <section className={styles.panel}>
       <div className="eyebrow">Order confirmed</div>
-      <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: "8px 0 16px" }}>
-        Thank you
-      </h1>
-      <p style={{ color: "var(--ink-soft)", maxWidth: 420, margin: "0 auto 32px" }}>
+      <h1 className={`serif ${styles.title}`}>Thank you</h1>
+      <p className={styles.lede}>
         Your order was placed successfully (test mode). It's now yours &mdash; one of one.
       </p>
       <Link to="/catalog" className="btn">

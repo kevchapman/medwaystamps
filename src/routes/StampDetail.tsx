@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext";
 import StampPlate from "../components/StampPlate";
 import ConditionTag from "../components/ConditionTag";
 import type { Stamp } from "../types";
+import styles from "./StampDetail.module.scss";
 
 export default function StampDetail() {
   const { id } = useParams<{ id: string }>();
@@ -23,52 +24,46 @@ export default function StampDetail() {
 
   if (error)
     return (
-      <p role="alert" style={{ padding: "24px 64px" }}>
+      <p role="alert" className={styles.status}>
         Couldn't load this stamp: {error}
       </p>
     );
-  if (!stamp) return <p style={{ padding: "24px 64px" }}>Loading…</p>;
+  if (!stamp) return <p className={styles.status}>Loading…</p>;
 
   const available = stamp.status === "available";
 
   return (
     <section>
-      <div style={{ padding: "24px 64px 0", fontSize: 12, color: "var(--ink-soft)" }}>
-        <Link to="/catalog">Catalogue</Link> / {stamp.era} / <span style={{ color: "var(--ink)" }}>{stamp.title}</span>
+      <div className={styles.breadcrumb}>
+        <Link to="/catalog">Catalogue</Link> / {stamp.era} / <span className={styles.current}>{stamp.title}</span>
       </div>
 
-      <div style={{ display: "flex", gap: 80, padding: "48px 64px 100px", alignItems: "flex-start" }}>
-        <div style={{ flex: "0 0 420px", display: "flex", flexDirection: "column", alignItems: "center", gap: 20 }}>
-          <div style={{ background: "var(--paper-alt)", border: "1px solid var(--line)", padding: 40, display: "flex", justifyContent: "center" }}>
+      <div className={styles.layout}>
+        <div className={styles.plateCol}>
+          <div className={styles.plateFrame}>
             <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} size="lg" />
           </div>
-          <div className="serif" style={{ fontSize: 13, fontStyle: "italic", color: "var(--ink-soft)", textAlign: "center" }}>
-            {stamp.sgNumber} &middot; shown enlarged
-          </div>
+          <div className={`serif ${styles.plateCaption}`}>{stamp.sgNumber} &middot; shown enlarged</div>
         </div>
 
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 28, maxWidth: 480 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className={styles.info}>
+          <div className={styles.titleBlock}>
             <div className="eyebrow">
               {stamp.era} era &middot; issued {stamp.issueYear}
             </div>
-            <h1 className="serif" style={{ fontSize: 40, fontWeight: 500, margin: 0 }}>
-              {stamp.title}
-            </h1>
+            <h1 className={`serif ${styles.title}`}>{stamp.title}</h1>
           </div>
 
-          <p className="serif" style={{ fontStyle: "italic", fontSize: 15, lineHeight: 1.7, color: "var(--ink-soft)", margin: 0 }}>
-            {stamp.description}
-          </p>
+          <p className={`serif ${styles.description}`}>{stamp.description}</p>
 
           <div className="spec-list">
             <div className="spec-row">
               <span className="eyebrow">SG Number</span>
-              <span style={{ fontSize: 14 }}>{stamp.sgNumber}</span>
+              <span className={styles.specValue}>{stamp.sgNumber}</span>
             </div>
             <div className="spec-row">
               <span className="eyebrow">Country</span>
-              <span style={{ fontSize: 14 }}>{stamp.country}</span>
+              <span className={styles.specValue}>{stamp.country}</span>
             </div>
             <div className="spec-row">
               <span className="eyebrow">Condition</span>
@@ -77,14 +72,12 @@ export default function StampDetail() {
             {stamp.grade && (
               <div className="spec-row">
                 <span className="eyebrow">Grade</span>
-                <span style={{ fontSize: 14 }}>{stamp.grade}</span>
+                <span className={styles.specValue}>{stamp.grade}</span>
               </div>
             )}
           </div>
 
-          <div className="serif" style={{ fontSize: 34, fontWeight: 600, color: "var(--oxblood)" }}>
-            {formatPrice(stamp.pricePence)}
-          </div>
+          <div className={`serif ${styles.priceLarge}`}>{formatPrice(stamp.pricePence)}</div>
 
           <button
             className="btn"
@@ -101,9 +94,7 @@ export default function StampDetail() {
           >
             {available ? "Add to Collection" : "Sold"}
           </button>
-          <div style={{ fontSize: 12, color: "var(--ink-soft)", textAlign: "center" }}>
-            One of one &mdash; once it's gone, it's gone.
-          </div>
+          <div className={styles.footnote}>One of one &mdash; once it's gone, it's gone.</div>
         </div>
       </div>
     </section>

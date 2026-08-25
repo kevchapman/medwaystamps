@@ -1,0 +1,74 @@
+// Layout for the Cart route only. Shared visual elements (.serif, .eyebrow,
+// .btn, .spec-list, .spec-row, ...) stay in src/index.css.
+
+.empty {
+  padding: 56px 64px 100px;
+}
+
+.emptyTitle {
+  font-size: 36px;
+  font-weight: 500;
+  margin: 8px 0 24px;
+}
+
+.emptyText {
+  color: var(--ink-soft);
+}
+
+.page {
+  padding: 56px 64px 100px;
+  max-width: 640px;
+}
+
+.pageTitle {
+  font-size: 36px;
+  font-weight: 500;
+  margin: 8px 0 32px;
+}
+
+.lineTitle {
+  font-size: 16px;
+}
+
+.lineRight {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.linePrice {
+  font-weight: 600;
+  color: var(--oxblood);
+}
+
+.removeBtn {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 0;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 28px 0;
+}
+
+.totalValue {
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--oxblood);
+}
+
+.error {
+  color: var(--oxblood);
+}
+
+.checkoutBtn {
+  width: 100%;
+}
