@@ -4,7 +4,17 @@
   gap: 6px;
 }
 
+// Locked to exactly 2 lines — regardless of whether the actual title is
+// short or long — so every card in the grid reserves the same amount of
+// vertical space here and rows stay aligned. Longer titles clamp with an
+// ellipsis; shorter ones just leave the second line blank.
 .title {
   font-size: 18px;
   font-weight: 500;
+  line-height: 1.3;
+  min-height: 2.6em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
