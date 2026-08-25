@@ -16,8 +16,6 @@
 }
 
 .headerTitle {
-  font-size: 36px;
-  font-weight: 500;
   margin: 0;
 }
 
@@ -33,19 +31,4 @@
 
 .error {
   padding: 0 64px;
-}
-
-.grid {
-  padding: 24px 64px 100px;
-}
-
-.cardBody {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.cardTitle {
-  font-size: 18px;
-  font-weight: 500;
 }

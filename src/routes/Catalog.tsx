@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { listStamps } from "../lib/api";
-import { formatPrice } from "../lib/format";
-import StampPlate from "../components/StampPlate";
-import ConditionTag from "../components/ConditionTag";
+import StampGrid from "../components/StampGrid";
 import type { Stamp, StampCondition } from "../types";
 import styles from "./Catalog.module.scss";
 
@@ -50,7 +48,7 @@ export default function Catalog() {
       <div className={styles.header}>
         <div className="eyebrow">The catalogue</div>
         <div className={styles.headerRow}>
-          <h1 className={`serif ${styles.headerTitle}`}>All stamps</h1>
+          <h1 className={`serif page-title ${styles.headerTitle}`}>All stamps</h1>
           <div className={styles.count}>
             {loading ? "Searching…" : `${total} stamp${total === 1 ? "" : "s"} found`}
           </div>
@@ -93,33 +91,7 @@ export default function Catalog() {
         </p>
       )}
 
-      <ul className={`stamp-grid ${styles.grid}`}>
-        {items.map((stamp) => (
-          <li key={stamp.id}>
-            <Link to={`/stamps/${stamp.id}`} className="stamp-card">
-              <div className="plate-frame">
-                <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} />
-              </div>
-              <div className={styles.cardBody}>
-                <div className="eyebrow">
-                  {stamp.era} &middot; {stamp.issueYear}
-                </div>
-                <div className={`serif ${styles.cardTitle}`}>{stamp.title}</div>
-                <div className="meta-row">
-                  <span>{stamp.sgNumber}</span>
-                  <ConditionTag condition={stamp.condition} />
-                  {stamp.grade && <span>{stamp.grade}</span>}
-                </div>
-                <p className="desc">{stamp.description}</p>
-                <div className="price-row">
-                  <span className="price">{formatPrice(stamp.pricePence)}</span>
-                  <span className="view-link">View &rarr;</span>
-                </div>
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <StampGrid stamps={items} />
     </section>
   );
 }

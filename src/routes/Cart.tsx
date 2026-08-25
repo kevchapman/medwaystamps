@@ -28,7 +28,7 @@ export default function Cart() {
     return (
       <section className={styles.empty}>
         <div className="eyebrow">Your cart</div>
-        <h1 className={`serif ${styles.emptyTitle}`}>Nothing here yet</h1>
+        <h1 className={`serif page-title ${styles.emptyTitle}`}>Nothing here yet</h1>
         <p className={styles.emptyText}>
           <Link to="/catalog">Browse the catalogue</Link> to find your next piece.
         </p>
@@ -39,7 +39,7 @@ export default function Cart() {
   return (
     <section className={styles.page}>
       <div className="eyebrow">Your cart</div>
-      <h1 className={`serif ${styles.pageTitle}`}>
+      <h1 className={`serif page-title ${styles.pageTitle}`}>
         {lines.length} item{lines.length === 1 ? "" : "s"}
       </h1>
 

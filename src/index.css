@@ -48,6 +48,11 @@ a:hover {
   font-weight: 600;
 }
 
+.page-title {
+  font-size: 36px;
+  font-weight: 500;
+}
+
 .btn {
   display: inline-block;
   background: var(--oxblood);
@@ -161,12 +166,15 @@ main {
   gap: 16px;
   color: inherit;
 }
-.stamp-card .plate-frame {
+.plate-frame {
   background: var(--paper-alt);
   border: 1px solid var(--line);
   padding: 24px;
   display: flex;
   justify-content: center;
+}
+.plate-frame--lg {
+  padding: 40px;
 }
 .stamp-card .meta-row {
   display: flex;
