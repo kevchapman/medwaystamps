@@ -107,12 +107,20 @@ a:hover {
 }
 
 /* Layout shell */
+/* The bar spans the full page edge-to-edge (so its border-bottom does
+   too); the inner wrapper caps its content to the same max-width/gutter
+   as <main>, so the nav content lines up with the page content below it
+   instead of stretching wider on large viewports. */
 .site-nav {
+  border-bottom: 1px solid var(--line);
+}
+.site-nav__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
   padding: 28px var(--page-padding-x);
-  border-bottom: 1px solid var(--line);
 }
 .site-nav .wordmark {
   display: flex;

@@ -14,15 +14,17 @@ export default function App() {
   return (
     <div className="app">
       <nav className="site-nav">
-        <Link to="/" className="wordmark">
-          <Logo size={32} />
-          Medway Stamps
-        </Link>
-        <div className="links">
-          <Link to="/catalog">Catalogue</Link>
-          <Link to="/cart" className="cart-link">
-            Cart ({lines.length})
+        <div className="site-nav__inner">
+          <Link to="/" className="wordmark">
+            <Logo size={32} />
+            Medway Stamps
           </Link>
+          <div className="links">
+            <Link to="/catalog">Catalogue</Link>
+            <Link to="/cart" className="cart-link">
+              Cart ({lines.length})
+            </Link>
+          </div>
         </div>
       </nav>
 
