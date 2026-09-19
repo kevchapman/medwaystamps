@@ -9,6 +9,16 @@ import type { Env } from "../functions/lib/types";
 // through to React Router's SSR request handler. See CLAUDE.md.
 const app = new Hono<{ Bindings: Env }>();
 
+// Defense-in-depth beyond robots.txt (see app/routes/robots.tsx) — some
+// crawlers/tools ignore the file but respect this header. Applied to every
+// response, API included, not just pages, while ALLOW_INDEXING isn't "true".
+app.use("*", async (c, next) => {
+  await next();
+  if (c.env.ALLOW_INDEXING !== "true") {
+    c.res.headers.set("X-Robots-Tag", "noindex");
+  }
+});
+
 app.route("/", apiApp);
 
 // Home ("/") and stamp detail pages are the two cached routes — a hit here

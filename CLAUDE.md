@@ -83,9 +83,16 @@ read-side self-heal in `workers/app.ts` as backstop — and `status` is never in
 cached HTML at all, rendered instead by `app/components/AddToCartControl.tsx`, a
 client-only island that fetches live status after hydration.
 
-Not yet built: `/sitemap.xml`, `/robots.txt`, the `ALLOW_INDEXING` env-gated
-noindex/launch switch — check SPEC.md or recent git history for whether that's landed
-since this was written.
+**The site is `noindex`d by default** — `wrangler.toml`'s `[vars] ALLOW_INDEXING =
+"false"` is what controls this. While it's `"false"` (the default until launch is
+deliberately flipped on): `app/routes/robots.tsx` serves a blanket `Disallow: /`, and
+`workers/app.ts` sets `X-Robots-Tag: noindex` on **every** response — pages and
+`/api/*` alike — as defense-in-depth beyond the file (some crawlers/tools ignore
+`robots.txt` but respect the header). `app/routes/sitemap.tsx` lists `/`, `/catalog`,
+and every non-`sold` stamp's detail page — both routes are Hono-free "resource routes"
+(no default export; React Router returns the loader's `Response` directly). Flipping
+`ALLOW_INDEXING` to `"true"` is meant to be its own reviewable PR when launch is
+actually ready, not bundled into a feature change.
 
 **Admin auth** is a custom email+password login with server-side sessions (`admins`/
 `sessions` tables in D1) — not Cloudflare Access, not JWTs. A session is a random

@@ -12,6 +12,12 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = "./build/client"
 
+# Committed (not a secret) so "we're ready to launch" is a reviewable PR
+# diff, not a silent dashboard toggle. Blocks all crawling until flipped —
+# see workers/app.ts and app/routes/robots.tsx.
+[vars]
+ALLOW_INDEXING = "false"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "medway-stamps-db"

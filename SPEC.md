@@ -23,15 +23,15 @@ Stripe test-mode checkout, end to end.
 Admin auth and a stamp add/edit UI are now built — see §4 (`admins`/`sessions`
 tables), §5 (`/api/admin/*` routes), §6 (`/admin/*` frontend routes), and §7.
 
-The site is also mid-migration to server-rendered (SSR) pages for search-engine
-crawlability, replacing the client-only SPA — see §7's Frontend row. Done: the
-platform migration (React Router v7 on Cloudflare Workers), SSR data loading + a
+The site has also migrated to server-rendered (SSR) pages for search-engine
+crawlability, replacing the client-only SPA — see §7's Frontend row. This migration is
+now **complete**: React Router v7 on Cloudflare Workers, SSR data loading + a
 regenerate-on-write KV cache for `Home`/`StampDetail` (`Catalog` is SSR'd live but not
-cached), and per-route `<title>`/meta description. Not yet done: `/sitemap.xml`,
-`/robots.txt`, and the `ALLOW_INDEXING` env-gated switch (a deliberate
-`noindex`/`Disallow: /` until launch is flipped on) — until those land, the site has
-no crawl-blocking mechanism at all yet, so don't treat it as safe to let get indexed.
-Check recent git history for what's landed since this was last updated.
+cached), per-route `<title>`/meta description, `/sitemap.xml`, `/robots.txt`, and a
+blanket `X-Robots-Tag: noindex` on every response. **The site stays deliberately
+unindexed** (`wrangler.toml`'s `ALLOW_INDEXING = "false"`) until launch — flipping that
+to `"true"` is its own reviewable PR, separate from any feature work, done only when
+actually ready to be crawled.
 
 ## 3. Assumptions
 
@@ -159,6 +159,8 @@ React + TypeScript + Vite SPA, React Router. Routes:
 | `/admin` | Admin dashboard — list stamps, jump to add/edit |
 | `/admin/stamps/new` | Add a stamp (requires login) |
 | `/admin/stamps/:id/edit` | Edit a stamp + manage its photo (requires login) |
+| `/sitemap.xml` | Generated sitemap — `/`, `/catalog`, every non-sold stamp |
+| `/robots.txt` | `Disallow: /` until `ALLOW_INDEXING="true"`, then allows with `Disallow: /admin` |
 
 ## 7. Tech stack & hosting
 
