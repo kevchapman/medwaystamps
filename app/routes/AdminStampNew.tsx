@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import StampForm from "../components/StampForm";
 import styles from "./AdminStampForm.module.scss";
 

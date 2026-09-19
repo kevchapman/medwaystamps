@@ -1,5 +1,9 @@
 node_modules/
 dist/
+build/
+.react-router/
+worker-configuration.d.ts
+*.tsbuildinfo
 .wrangler/
 .dev.vars
 .env

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { formatPrice } from "../lib/format";
 import StampPlate from "./StampPlate";
 import ConditionTag from "./ConditionTag";

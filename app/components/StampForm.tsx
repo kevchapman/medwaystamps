@@ -22,7 +22,7 @@ interface StampFormProps {
 // Shared controlled form for both /admin/stamps/new and
 // /admin/stamps/:id/edit. On submit: create-or-update the stamp's fields via
 // JSON, then (if a photo was chosen) upload it as a separate multipart call
-// — see src/lib/api.ts for why those are two requests rather than one.
+// — see app/lib/api.ts for why those are two requests rather than one.
 export default function StampForm({ mode, initial, onSaved }: StampFormProps) {
   const [title, setTitle] = useState(initial?.title ?? "");
   const [description, setDescription] = useState(initial?.description ?? "");

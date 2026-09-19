@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import styles from "./AdminLogin.module.scss";
 

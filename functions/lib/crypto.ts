@@ -10,7 +10,7 @@ function toB64(bytes: Uint8Array): string {
   return btoa(binary);
 }
 
-function fromB64(b64: string): Uint8Array {
+function fromB64(b64: string): Uint8Array<ArrayBuffer> {
   const binary = atob(b64);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
@@ -26,7 +26,7 @@ function timingSafeEqual(a: Uint8Array, b: Uint8Array): boolean {
 
 async function deriveBits(
   password: string,
-  salt: Uint8Array,
+  salt: Uint8Array<ArrayBuffer>,
   iterations: number,
 ): Promise<Uint8Array> {
   const key = await crypto.subtle.importKey(
