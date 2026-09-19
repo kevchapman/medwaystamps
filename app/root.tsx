@@ -13,6 +13,16 @@ import { AdminAuthProvider, useAdminAuth } from "./context/AdminAuthContext";
 import Logo from "./components/Logo";
 import "./index.css";
 
+// Default title/favicon for routes that don't define their own `meta`
+// export (Cart, Checkout*, Admin*) — <Meta/> merges this with a route's own
+// meta by tag name, the route's own `title` winning when both exist. Don't
+// also hardcode a <title> in Layout's <head> below — that produces two
+// <title> tags (invalid HTML, and the hardcoded one wins in browsers since
+// it comes first in DOM order), silently defeating every route's own title.
+export function meta() {
+  return [{ title: "Medway Stamps" }];
+}
+
 export const links: Route.LinksFunction = () => [
   { rel: "icon", type: "image/svg+xml", href: "/favicon.svg" },
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -29,7 +39,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Medway Stamps</title>
         <Meta />
         <Links />
       </head>
