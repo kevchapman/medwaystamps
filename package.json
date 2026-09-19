@@ -16,7 +16,10 @@
     "db:migrate:local": "wrangler d1 migrations apply medway-stamps-db --local",
     "db:migrate:remote": "wrangler d1 migrations apply medway-stamps-db --remote",
     "db:seed:local": "wrangler d1 execute medway-stamps-db --local --file=./db/seed.sql",
-    "db:seed:remote": "wrangler d1 execute medway-stamps-db --remote --file=./db/seed.sql"
+    "db:seed:remote": "wrangler d1 execute medway-stamps-db --remote --file=./db/seed.sql",
+    "db:seed:admin:local": "node scripts/seed-admin.mjs --local",
+    "db:seed:admin:remote": "node scripts/seed-admin.mjs --remote",
+    "db:pull:remote": "node scripts/pull-remote-data.mjs"
   },
   "dependencies": {
     "drizzle-orm": "^0.36.0",

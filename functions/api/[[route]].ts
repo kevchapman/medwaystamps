@@ -1,13 +1,17 @@
 import { Hono } from "hono";
 import { handle } from "hono/cloudflare-pages";
+import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { and, asc, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { getDb } from "../lib/db";
 import { getStripe } from "../lib/stripe";
 import { toStampDTO } from "../lib/serialize";
-import { orderItems, orders, stampImages, stampTags, stamps } from "../../db/schema";
+import { verifyPassword } from "../lib/crypto";
+import { createSession, deleteSessionByToken, SESSION_COOKIE } from "../lib/session";
+import { requireAdmin } from "../lib/requireAdmin";
+import { admins, orderItems, orders, stampImages, stampTags, stamps } from "../../db/schema";
 import type { Env } from "../lib/types";
 
-const app = new Hono<{ Bindings: Env }>().basePath("/api");
+const app = new Hono<{ Bindings: Env; Variables: { adminId: string } }>().basePath("/api");
 
 // ---- GET /api/stamps ----------------------------------------------------
 app.get("/stamps", async (c) => {
@@ -222,6 +226,216 @@ app.post("/webhooks/stripe", async (c) => {
   }
 
   return c.json({ received: true });
+});
+
+// ---- Admin: auth --------------------------------------------------------
+
+// Cookie is Secure whenever the request itself arrived over https — true in
+// production, false under local `wrangler pages dev` (plain http) — so the
+// same code is correct in both without special-casing "localhost".
+function isHttps(c: { req: { url: string } }): boolean {
+  return new URL(c.req.url).protocol === "https:";
+}
+
+app.post("/admin/login", async (c) => {
+  const body = await c.req.json<{ email?: string; password?: string }>().catch(() => null);
+  if (!body?.email || !body?.password) {
+    return c.json({ error: "Email and password required" }, 400);
+  }
+
+  const db = getDb(c.env);
+  const [admin] = await db.select().from(admins).where(eq(admins.email, body.email.toLowerCase()));
+  const ok = admin ? await verifyPassword(body.password, admin.passwordHash) : false;
+  if (!admin || !ok) return c.json({ error: "Invalid email or password" }, 401);
+
+  const { token, expiresAt } = await createSession(db, admin.id);
+  setCookie(c, SESSION_COOKIE, token, {
+    httpOnly: true,
+    secure: isHttps(c),
+    sameSite: "Lax",
+    path: "/",
+    expires: new Date(expiresAt),
+  });
+
+  return c.json({ id: admin.id, email: admin.email });
+});
+
+app.post("/admin/logout", async (c) => {
+  const token = getCookie(c, SESSION_COOKIE);
+  if (token) await deleteSessionByToken(getDb(c.env), token);
+  deleteCookie(c, SESSION_COOKIE, { path: "/" });
+  return c.json({ ok: true });
+});
+
+app.get("/admin/me", requireAdmin, async (c) => {
+  const [admin] = await getDb(c.env).select().from(admins).where(eq(admins.id, c.get("adminId")));
+  if (!admin) return c.json({ error: "Unauthorized" }, 401);
+  return c.json({ id: admin.id, email: admin.email });
+});
+
+// ---- Admin: stamp CRUD ---------------------------------------------------
+
+const STAMP_CONDITIONS = ["mint", "mounted_mint", "used", "fine_used"] as const;
+const STAMP_STATUSES = ["available", "reserved", "sold"] as const;
+
+type StampInputBody = Record<string, unknown>;
+
+// Manual validation, matching this file's existing style elsewhere (no zod).
+function validateStampInput(body: unknown, opts: { partial?: boolean } = {}): string | null {
+  if (!body || typeof body !== "object") return "Invalid request body";
+  const b = body as StampInputBody;
+
+  if (!opts.partial) {
+    const required = ["title", "description", "era", "sgNumber", "condition", "pricePence"];
+    for (const field of required) {
+      if (b[field] === undefined || b[field] === null || b[field] === "") {
+        return `${field} is required`;
+      }
+    }
+  }
+  if (b.condition !== undefined && !STAMP_CONDITIONS.includes(b.condition as never)) {
+    return "Invalid condition";
+  }
+  if (b.status !== undefined && !STAMP_STATUSES.includes(b.status as never)) {
+    return "Invalid status";
+  }
+  if (b.pricePence !== undefined && (typeof b.pricePence !== "number" || b.pricePence < 0)) {
+    return "pricePence must be a non-negative number";
+  }
+  if (b.quantity !== undefined && (typeof b.quantity !== "number" || b.quantity < 0)) {
+    return "quantity must be a non-negative number";
+  }
+  if (b.tags !== undefined && (!Array.isArray(b.tags) || b.tags.some((t) => typeof t !== "string"))) {
+    return "tags must be an array of strings";
+  }
+  return null;
+}
+
+// Only copies fields that were actually present in the body, so PUT can send
+// a partial update without clobbering untouched columns.
+function normalizeStampInput(body: StampInputBody) {
+  const out: Record<string, unknown> = {};
+  for (const field of ["title", "description", "country", "era", "sgNumber", "condition", "status"]) {
+    if (body[field] !== undefined) out[field] = body[field];
+  }
+  if (body.grade !== undefined) out.grade = body.grade === "" ? null : body.grade;
+  for (const field of ["issueYear", "issueYearEnd", "pricePence", "quantity"]) {
+    if (body[field] !== undefined) out[field] = body[field] === null ? null : Number(body[field]);
+  }
+  return out;
+}
+
+app.post("/admin/stamps", requireAdmin, async (c) => {
+  const body = await c.req.json().catch(() => null);
+  const validationError = validateStampInput(body);
+  if (validationError) return c.json({ error: validationError }, 400);
+
+  const db = getDb(c.env);
+  const id = crypto.randomUUID();
+  const now = Date.now();
+  const fields = normalizeStampInput(body as StampInputBody);
+
+  await db.insert(stamps).values({
+    id,
+    title: "",
+    description: "",
+    era: "",
+    sgNumber: "",
+    condition: "mint",
+    pricePence: 0,
+    ...fields,
+    createdAt: now,
+    updatedAt: now,
+  } as typeof stamps.$inferInsert);
+
+  const tags = Array.isArray((body as StampInputBody).tags) ? ((body as StampInputBody).tags as string[]) : [];
+  if (tags.length) {
+    await db.insert(stampTags).values(tags.map((tag) => ({ stampId: id, tag })));
+  }
+
+  const [stamp] = await db.select().from(stamps).where(eq(stamps.id, id));
+  return c.json(
+    toStampDTO(stamp, [], tags.map((tag) => ({ stampId: id, tag }))),
+    201,
+  );
+});
+
+app.put("/admin/stamps/:id", requireAdmin, async (c) => {
+  const id = c.req.param("id");
+  const body = await c.req.json().catch(() => null);
+  const validationError = validateStampInput(body, { partial: true });
+  if (validationError) return c.json({ error: validationError }, 400);
+
+  const db = getDb(c.env);
+  const [existing] = await db.select().from(stamps).where(eq(stamps.id, id));
+  if (!existing) return c.json({ error: "Stamp not found" }, 404);
+
+  const fields = normalizeStampInput(body as StampInputBody);
+  await db
+    .update(stamps)
+    .set({ ...fields, updatedAt: Date.now() })
+    .where(eq(stamps.id, id));
+
+  const tags = (body as StampInputBody).tags;
+  if (Array.isArray(tags)) {
+    await db.delete(stampTags).where(eq(stampTags.stampId, id));
+    if (tags.length) await db.insert(stampTags).values((tags as string[]).map((tag) => ({ stampId: id, tag })));
+  }
+
+  const [stamp] = await db.select().from(stamps).where(eq(stamps.id, id));
+  const [images, stampTagRows] = await Promise.all([
+    db.select().from(stampImages).where(eq(stampImages.stampId, id)),
+    db.select().from(stampTags).where(eq(stampTags.stampId, id)),
+  ]);
+  return c.json(toStampDTO(stamp, images, stampTagRows));
+});
+
+// ---- Admin: image upload --------------------------------------------------
+
+const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+const EXT_BY_MIME: Record<string, string> = {
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/webp": "webp",
+};
+
+app.post("/admin/stamps/:id/images", requireAdmin, async (c) => {
+  const stampId = c.req.param("id");
+  const db = getDb(c.env);
+  const [stamp] = await db.select().from(stamps).where(eq(stamps.id, stampId));
+  if (!stamp) return c.json({ error: "Stamp not found" }, 404);
+
+  const body = await c.req.parseBody();
+  const file = body["image"];
+  if (!(file instanceof File)) return c.json({ error: "image file is required" }, 400);
+
+  const ext = EXT_BY_MIME[file.type];
+  if (!ext) return c.json({ error: "Unsupported image type (jpeg/png/webp only)" }, 400);
+  if (file.size > MAX_IMAGE_BYTES) return c.json({ error: "Image too large (8MB max)" }, 400);
+
+  const existing = await db.select().from(stampImages).where(eq(stampImages.stampId, stampId));
+  const r2Key = `stamps/${stampId}/${crypto.randomUUID()}.${ext}`;
+  await c.env.STAMPS_BUCKET.put(r2Key, await file.arrayBuffer(), {
+    httpMetadata: { contentType: file.type },
+  });
+
+  const imageId = crypto.randomUUID();
+  const altTextRaw = body["altText"];
+  const altText = typeof altTextRaw === "string" && altTextRaw !== "" ? altTextRaw : null;
+  const sortOrder = existing.length;
+  await db.insert(stampImages).values({ id: imageId, stampId, r2Key, altText, sortOrder });
+
+  return c.json({ id: imageId, url: `/api/images/${r2Key}`, altText, sortOrder }, 201);
+});
+
+app.delete("/admin/images/:imageId", requireAdmin, async (c) => {
+  const db = getDb(c.env);
+  const [image] = await db.select().from(stampImages).where(eq(stampImages.id, c.req.param("imageId")));
+  if (!image) return c.json({ error: "Image not found" }, 404);
+
+  await c.env.STAMPS_BUCKET.delete(image.r2Key);
+  await db.delete(stampImages).where(eq(stampImages.id, image.id));
+  return c.json({ ok: true });
 });
 
 export const onRequest = handle(app);

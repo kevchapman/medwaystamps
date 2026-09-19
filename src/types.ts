@@ -51,3 +51,26 @@ export interface CartLine {
   pricePence: number;
   quantity: number;
 }
+
+// Fields the admin form submits to create/edit a stamp. `pricePence` is
+// still the wire format — StampForm converts from a pounds input.
+export interface StampInput {
+  title: string;
+  description: string;
+  country: string;
+  era: string;
+  issueYear: number | null;
+  issueYearEnd: number | null;
+  sgNumber: string;
+  condition: StampCondition;
+  grade: string | null;
+  pricePence: number;
+  quantity: number;
+  status: StampStatus;
+  tags: string[];
+}
+
+export interface Admin {
+  id: string;
+  email: string;
+}

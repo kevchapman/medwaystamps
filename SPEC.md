@@ -18,10 +18,11 @@ Stripe test-mode checkout, end to end.
 - Data seeded directly into the database (script/SQL), not via a UI
 
 **Explicitly out of scope for now** (see §8 Future phases)
-- Admin UI for adding/editing stamps
-- Any authentication (no customer accounts, no admin login)
 - Live payments
 - SEO/SSR — a client-rendered SPA is fine for an internal demo
+
+Admin auth and a stamp add/edit UI are now built — see §4 (`admins`/`sessions`
+tables), §5 (`/api/admin/*` routes), §6 (`/admin/*` frontend routes), and §7.
 
 ## 3. Assumptions
 
@@ -69,6 +70,23 @@ Stripe test-mode checkout, end to end.
 | stamp_id | text | FK → stamps.id |
 | tag | text | e.g. "penny black", "definitive", "error" |
 
+### `admins`
+| field | type | notes |
+|---|---|---|
+| id | text (uuid) | PK |
+| email | text | unique |
+| password_hash | text | PBKDF2-SHA256, self-describing format — see `functions/lib/crypto.ts` |
+| created_at | integer (unix ts) | |
+
+### `sessions`
+| field | type | notes |
+|---|---|---|
+| id | text (uuid) | PK |
+| token_hash | text | SHA-256 of the raw session cookie token, unique — never the raw token |
+| admin_id | text | FK → admins.id |
+| expires_at | integer (unix ts) | fixed 7-day TTL from creation |
+| created_at | integer (unix ts) | |
+
 ### `orders`
 | field | type | notes |
 |---|---|---|
@@ -107,8 +125,13 @@ All under `/api`, implemented as Hono handlers on Cloudflare Workers/Pages Funct
 | GET | `/api/stamps/:id` | Stamp detail |
 | POST | `/api/checkout` | Create a Stripe Checkout session for the given cart items; marks stamps `reserved`; returns the session URL |
 | POST | `/api/webhooks/stripe` | Stripe webhook — on `checkout.session.completed`, create the `order`/`order_items` and mark stamps `sold`; on expiry/cancellation, release stamps back to `available` |
-
-Phase 2 will add authenticated `POST/PUT/DELETE /api/stamps` routes for admin.
+| POST | `/api/admin/login` | Email+password login; sets an httpOnly session cookie |
+| POST | `/api/admin/logout` | Clears the session (both the cookie and its DB row) |
+| GET | `/api/admin/me` | Current admin, or 401 if not logged in |
+| POST | `/api/admin/stamps` | Create a stamp (requires admin session) |
+| PUT | `/api/admin/stamps/:id` | Edit a stamp's fields/tags (requires admin session) |
+| POST | `/api/admin/stamps/:id/images` | Upload a photo to R2 for a stamp, `multipart/form-data` (requires admin session) |
+| DELETE | `/api/admin/images/:imageId` | Remove a stamp photo from R2 + the DB (requires admin session) |
 
 ## 6. Frontend
 
@@ -122,6 +145,10 @@ React + TypeScript + Vite SPA, React Router. Routes:
 | `/cart` | Cart contents, quantities, proceed to checkout |
 | `/checkout/success` | Stripe redirect on success |
 | `/checkout/cancel` | Stripe redirect on cancel |
+| `/admin/login` | Admin login |
+| `/admin` | Admin dashboard — list stamps, jump to add/edit |
+| `/admin/stamps/new` | Add a stamp (requires login) |
+| `/admin/stamps/:id/edit` | Edit a stamp + manage its photo (requires login) |
 
 ## 7. Tech stack & hosting
 
@@ -132,7 +159,7 @@ React + TypeScript + Vite SPA, React Router. Routes:
 | Database | **Cloudflare D1** (SQLite) via **Drizzle ORM** |
 | Images | **Cloudflare R2** (zero egress fees) |
 | Payments | **Stripe**, test mode for this phase |
-| Auth/Admin | None yet — deferred to Phase 2 |
+| Auth/Admin | Custom email+password login, server-side sessions (D1 `admins`/`sessions` tables) |
 
 **Why this stack:** single vendor (Cloudflare) for hosting, compute, DB, and storage,
 deployed from the GitHub repo already linked to the account. Free tier is usable for
@@ -145,8 +172,10 @@ frontend or hosting.
 
 ## 8. Future phases (not in this prototype)
 
-- Admin UI: add/edit/delete stamps, image upload, bulk CSV import
-- Auth: admin login (Cloudflare Access or custom), later customer accounts
+- Bulk CSV import for stamps
+- Multiple admin accounts / admin-user management UI (the `admins` table already
+  supports it — just no self-service way to add a second admin yet)
+- Customer accounts (still none — admin auth is separate from this)
 - Live Stripe mode + real order fulfillment workflow
 - Reconsider SSR (e.g. Next.js) if organic search for SG numbers/collector terms matters
 - Harden the reservation/concurrency logic in §4

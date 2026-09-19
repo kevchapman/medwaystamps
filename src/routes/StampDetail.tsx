@@ -41,7 +41,15 @@ export default function StampDetail() {
       <div className={styles.layout}>
         <div className={styles.plateCol}>
           <div className="plate-frame plate-frame--lg">
-            <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} size="lg" />
+            {stamp.images[0] ? (
+              <img
+                src={stamp.images[0].url}
+                alt={stamp.images[0].altText ?? stamp.title}
+                className={styles.photo}
+              />
+            ) : (
+              <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} size="lg" />
+            )}
           </div>
           <div className={`serif ${styles.plateCaption}`}>{stamp.sgNumber} &middot; shown enlarged</div>
         </div>

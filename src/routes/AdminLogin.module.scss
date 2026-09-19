@@ -1,0 +1,27 @@
+.page {
+  padding-block: 48px;
+  max-width: 360px;
+}
+
+.title {
+  font-size: 28px;
+  margin: 8px 0 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.error {
+  color: var(--oxblood);
+  font-size: 13px;
+  margin: 0;
+}

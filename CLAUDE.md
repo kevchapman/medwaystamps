@@ -6,8 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Medway Stamps — a prototype ecommerce site for rare/collectible British postage stamps.
 See [SPEC.md](./SPEC.md) for the full spec (data model, API surface, and what's
-deliberately deferred — admin UI, auth, live payments, SEO). See
-[README.md](./README.md) for first-time setup and day-to-day dev commands.
+deliberately deferred — live payments, SEO). See [README.md](./README.md) for
+first-time setup and day-to-day dev commands.
 
 Stack: React + TypeScript (Vite) · Hono on Cloudflare Pages Functions · Cloudflare D1
 (SQLite via Drizzle ORM) · Cloudflare R2 · Stripe Checkout.
@@ -43,11 +43,24 @@ by hand after a migration that needs new/changed seed rows.
 ## Architecture
 
 **The entire backend is one file**: `functions/api/[[route]].ts` — a single Hono app
-handling every route (`GET /stamps`, `GET /stamps/:id`, `GET /images/*`, `POST
-/checkout`, `POST /webhooks/stripe`). Shared helpers live in `functions/lib/`
-(`db.ts`, `stripe.ts`, `serialize.ts`, `types.ts`). This is a Cloudflare Pages
-Functions catch-all, not a traditional Express-style router — new routes are added as
-more `app.get/post(...)` calls in that one file.
+handling every route: the public `GET /stamps`, `GET /stamps/:id`, `GET /images/*`,
+`POST /checkout`, `POST /webhooks/stripe`, plus the admin routes under `/admin/*`
+(`POST /admin/login`, `POST /admin/logout`, `GET /admin/me`, `POST /admin/stamps`,
+`PUT /admin/stamps/:id`, `POST /admin/stamps/:id/images`, `DELETE
+/admin/images/:imageId`). Shared helpers live in `functions/lib/` (`db.ts`,
+`stripe.ts`, `serialize.ts`, `types.ts`, plus `crypto.ts`/`session.ts` for password
+hashing and session tokens and `requireAdmin.ts`, the Hono middleware gating every
+`/admin/*` route). This is a Cloudflare Pages Functions catch-all, not a traditional
+Express-style router — new routes are added as more `app.get/post(...)` calls in that
+one file.
+
+**Admin auth** is a custom email+password login with server-side sessions (`admins`/
+`sessions` tables in D1) — not Cloudflare Access, not JWTs. A session is a random
+token in an httpOnly cookie; only its SHA-256 hash is stored, so a DB read alone can't
+be replayed as a session. Only one admin account exists today, seeded via
+`npm run db:seed:admin:local`/`:remote` (see README) rather than `db/seed.sql` — the
+`admins` table is ordinary, so adding more admins later is just another row, not a
+schema change.
 
 **Stamps are unique one-off items** (`quantity` is almost always 1), not restockable
 SKUs. Checkout marks a stamp `reserved` when a Stripe Checkout session is created and
@@ -80,8 +93,15 @@ skill rather than hand-editing it.
 
 - `sgNumber` in the DB already includes the `"SG "` prefix (e.g. `"SG 2"`) — don't
   prepend `"SG"` again when displaying it.
-- Local D1 and production D1 are entirely separate; there's no sync between them.
-  Seeding one never seeds the other.
+- Local D1 and production D1 are entirely separate; there's no automatic sync between
+  them. `npm run db:pull:remote` does a one-way, on-demand pull of catalog data
+  (`stamps`/`stamp_images`/`stamp_tags`) + R2 images from production down to local —
+  useful for seeding local dev with the real catalog or as a backup. It never touches
+  `admins`/`sessions`, and there's no push in the other direction; admin edits are
+  made directly against whichever environment you're logged into.
+- Admin session cookies compute their `Secure` attribute from the request's own
+  protocol (`https` vs `http`) rather than hardcoding it, so the same login code is
+  correct both in local `wrangler pages dev` (plain http) and production (https).
 - wrangler is pinned to 3.x (not 4). `wrangler pages dev [dir] -- <command>`
   proxy-command mode conflicts with `pages_build_output_dir` in `wrangler.toml`
   ("Specify either a directory OR a proxy command, not both") — that's why local dev
