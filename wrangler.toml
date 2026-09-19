@@ -21,3 +21,7 @@ migrations_dir = "db/migrations"
 [[r2_buckets]]
 binding = "STAMPS_BUCKET"
 bucket_name = "medway-stamps-images"
+
+[[kv_namespaces]]
+binding = "PAGE_CACHE"
+id = "62418c370f2c4343961497809b5b6d73"

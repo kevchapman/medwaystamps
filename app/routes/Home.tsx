@@ -1,21 +1,31 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { listStamps } from "../lib/api";
+import { apiFetch } from "../lib/apiFetch.server";
 import StampPlate from "../components/StampPlate";
 import StampGrid from "../components/StampGrid";
-import type { Stamp } from "../types";
+import type { Stamp, StampListResponse } from "../types";
+import type { Route } from "./+types/Home";
 import styles from "./Home.module.scss";
 
-export default function Home() {
-  const [featured, setFeatured] = useState<Stamp[]>([]);
-  const [error, setError] = useState<string | null>(null);
+// SSR'd and cached (see app/lib/pageCache.server.ts) — none of this page's
+// content depends on stamp `status`, so it's safe to cache as-is.
+export async function loader({ context }: Route.LoaderArgs) {
+  const res = await apiFetch("/api/stamps?sort=newest&limit=6", context.cloudflare.env, context.cloudflare.ctx);
+  const data = (await res.json()) as StampListResponse;
+  return data.items;
+}
 
-  useEffect(() => {
-    listStamps({ sort: "newest", limit: 6 })
-      .then((res) => setFeatured(res.items))
-      .catch((err: unknown) => setError(String(err)));
-  }, []);
+export function meta() {
+  return [
+    { title: "Medway Stamps — Rare & Collectible British Philately" },
+    {
+      name: "description",
+      content: "Rare British stamps, authenticated and catalogued — each piece a single, verified original.",
+    },
+  ];
+}
 
+export default function Home({ loaderData }: Route.ComponentProps) {
+  const featured: Stamp[] = loaderData;
   const hero = featured[0];
 
   return (
@@ -56,8 +66,6 @@ export default function Home() {
         <div className="eyebrow">Recently acquired</div>
         <h2 className={`serif ${styles.sectionTitle}`}>New to the collection</h2>
       </div>
-
-      {error && <p role="alert">Couldn't load stamps: {error}</p>}
 
       <StampGrid stamps={featured} />
     </section>

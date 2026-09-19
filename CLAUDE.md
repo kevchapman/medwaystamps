@@ -64,13 +64,28 @@ added as more `app.get/post(...)` calls in that one file, same as always.
 **Pages are React Router v7 in framework mode** — `app/routes.ts` is the route table
 (config-based, not filename convention), `app/root.tsx` is the document shell +
 persistent nav/footer chrome + the `CartProvider`/`AdminAuthProvider` wrapping (this
-replaced the old `App.tsx` + `main.tsx` + `index.html` trio). **As of this migration,
-no route has a `loader` yet** — every page still fetches its own data client-side via
-`useEffect` + `app/lib/api.ts`, exactly as before; this was a deliberate first phase
-(prove the platform migration works, unchanged behavior) before adding SSR data
-loading, a Cloudflare KV regenerate-on-write cache for `Home`/`StampDetail`, and
-sitemap/robots/meta — check SPEC.md or recent git history for whether those later
-phases have landed since this was written.
+replaced the old `App.tsx` + `main.tsx` + `index.html` trio).
+
+**`Home` and `StampDetail` are SSR'd and cached; `Catalog` is SSR'd but not cached;
+everything else has no loader** (`Cart`, `Checkout*`, all `/admin/*` — still plain
+client-fetched via `useEffect` + `app/lib/api.ts`, unchanged from the pre-SSR app).
+Loaders don't write new D1 query code — `app/lib/apiFetch.server.ts`'s `apiFetch()`
+calls the existing Hono API in-process via a synthetic `Request`, same isolate, no
+network hop, reusing all the filter/sort/serialize logic already in
+`functions/api/app.ts`. `Catalog` isn't cached because its search/filter query-param
+space is unbounded — see `app/lib/pageCache.server.ts`'s top comment for the full
+reasoning, and for why the cache is correct without needing to invalidate on every
+place stamp `status` can change (checkout included, not just admin edits) — the short
+version: a cache hit is a KV read returning pre-rendered HTML (not data to re-render
+from, so a hit costs ~zero CPU), keyed `page:home`/`page:stamp:<id>`, eagerly rebuilt
+by the four admin write routes in `functions/api/app.ts` via `waitUntil`, with a
+read-side self-heal in `workers/app.ts` as backstop — and `status` is never in that
+cached HTML at all, rendered instead by `app/components/AddToCartControl.tsx`, a
+client-only island that fetches live status after hydration.
+
+Not yet built: `/sitemap.xml`, `/robots.txt`, the `ALLOW_INDEXING` env-gated
+noindex/launch switch — check SPEC.md or recent git history for whether that's landed
+since this was written.
 
 **Admin auth** is a custom email+password login with server-side sessions (`admins`/
 `sessions` tables in D1) — not Cloudflare Access, not JWTs. A session is a random

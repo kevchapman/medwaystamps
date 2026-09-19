@@ -7,6 +7,7 @@ import { toStampDTO } from "../lib/serialize";
 import { verifyPassword } from "../lib/crypto";
 import { createSession, deleteSessionByToken, SESSION_COOKIE } from "../lib/session";
 import { requireAdmin } from "../lib/requireAdmin";
+import { rebuildHomeCache, rebuildStampCache } from "../../app/lib/pageCache.server";
 import { admins, orderItems, orders, stampImages, stampTags, stamps } from "../../db/schema";
 import type { Env } from "../lib/types";
 
@@ -353,6 +354,12 @@ app.post("/admin/stamps", requireAdmin, async (c) => {
   }
 
   const [stamp] = await db.select().from(stamps).where(eq(stamps.id, id));
+
+  // A new stamp could enter Home's "recent" top-6 — its own detail page
+  // doesn't need rebuilding yet, the cache's read-side self-heal covers
+  // the first visit (see app/lib/pageCache.server.ts).
+  c.executionCtx.waitUntil(rebuildHomeCache(c.env, c.executionCtx));
+
   return c.json(
     toStampDTO(stamp, [], tags.map((tag) => ({ stampId: id, tag }))),
     201,
@@ -386,6 +393,10 @@ app.put("/admin/stamps/:id", requireAdmin, async (c) => {
     db.select().from(stampImages).where(eq(stampImages.stampId, id)),
     db.select().from(stampTags).where(eq(stampTags.stampId, id)),
   ]);
+
+  c.executionCtx.waitUntil(rebuildStampCache(c.env, c.executionCtx, id));
+  c.executionCtx.waitUntil(rebuildHomeCache(c.env, c.executionCtx));
+
   return c.json(toStampDTO(stamp, images, stampTagRows));
 });
 
@@ -424,6 +435,8 @@ app.post("/admin/stamps/:id/images", requireAdmin, async (c) => {
   const sortOrder = existing.length;
   await db.insert(stampImages).values({ id: imageId, stampId, r2Key, altText, sortOrder });
 
+  c.executionCtx.waitUntil(rebuildStampCache(c.env, c.executionCtx, stampId));
+
   return c.json({ id: imageId, url: `/api/images/${r2Key}`, altText, sortOrder }, 201);
 });
 
@@ -434,6 +447,9 @@ app.delete("/admin/images/:imageId", requireAdmin, async (c) => {
 
   await c.env.STAMPS_BUCKET.delete(image.r2Key);
   await db.delete(stampImages).where(eq(stampImages.id, image.id));
+
+  c.executionCtx.waitUntil(rebuildStampCache(c.env, c.executionCtx, image.stampId));
+
   return c.json({ ok: true });
 });
 

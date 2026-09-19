@@ -24,13 +24,14 @@ Admin auth and a stamp add/edit UI are now built — see §4 (`admins`/`sessions
 tables), §5 (`/api/admin/*` routes), §6 (`/admin/*` frontend routes), and §7.
 
 The site is also mid-migration to server-rendered (SSR) pages for search-engine
-crawlability, replacing the client-only SPA — see §7's Frontend row. The platform
-migration (React Router v7 on Cloudflare Workers) is done; pages don't yet actually
-render their data server-side (every route still fetches client-side, unchanged from
-before the migration) — that, a regenerate-on-write KV cache, and sitemap/robots/meta
-(including a deliberate `noindex`/`Disallow: /` until launch is flipped on) are
-separate follow-on phases. Check recent git history for what's landed since this was
-last updated.
+crawlability, replacing the client-only SPA — see §7's Frontend row. Done: the
+platform migration (React Router v7 on Cloudflare Workers), SSR data loading + a
+regenerate-on-write KV cache for `Home`/`StampDetail` (`Catalog` is SSR'd live but not
+cached), and per-route `<title>`/meta description. Not yet done: `/sitemap.xml`,
+`/robots.txt`, and the `ALLOW_INDEXING` env-gated switch (a deliberate
+`noindex`/`Disallow: /` until launch is flipped on) — until those land, the site has
+no crawl-blocking mechanism at all yet, so don't treat it as safe to let get indexed.
+Check recent git history for what's landed since this was last updated.
 
 ## 3. Assumptions
 
