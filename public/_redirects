@@ -1,4 +1,0 @@
-# Cloudflare Pages: serve the SPA shell for any route not matched by a
-# static asset or a Functions route (/api/* is handled by functions/ and
-# takes precedence automatically, so it doesn't need a rule here).
-/* /index.html 200

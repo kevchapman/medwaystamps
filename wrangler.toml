@@ -1,7 +1,16 @@
 name = "medway-stamps"
+main = "workers/app.ts"
 compatibility_date = "2025-07-18"
 compatibility_flags = ["nodejs_compat"]
-pages_build_output_dir = "dist"
+
+# Static assets (the client JS/CSS bundle, favicon) are served directly by
+# Cloudflare — free and unmetered — for any request that matches a built
+# file; everything else (SSR page routes, /api/*) falls through to the
+# Worker. This is the default (no run_worker_first), which is what we want:
+# no route in this app is both a literal static filename AND something that
+# needs the Worker to run first.
+[assets]
+directory = "./build/client"
 
 [[d1_databases]]
 binding = "DB"

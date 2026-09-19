@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate } from "react-router";
 import { useAdminAuth } from "../context/AdminAuthContext";
 
 // Route guard for /admin/* pages. Redirects to the login page whenever

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { useCart } from "../context/CartContext";
 import { createCheckoutSession } from "../lib/api";
 import { formatPrice } from "../lib/format";

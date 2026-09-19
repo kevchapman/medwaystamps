@@ -5,7 +5,7 @@ import { useId } from "react";
 // empty for all seeded data today — see SPEC.md's admin/image-upload
 // phase). Deterministic per stamp so the same item always renders the
 // same plate color. Perforation geometry matches the site's logo mark
-// (src/components/Logo.tsx) — corner-anchored bites, same rhythm along
+// (app/components/Logo.tsx) — corner-anchored bites, same rhythm along
 // each edge — so the two read as one visual system.
 
 const PLATE_COLORS = ["#1c1a17", "#1e3a5f", "#26372c", "#3a2a3a", "#332a1c"];

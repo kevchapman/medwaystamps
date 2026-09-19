@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import styles from "./CheckoutStatusPanel.module.scss";
 
 // The centered confirmation panel shown after returning from Stripe

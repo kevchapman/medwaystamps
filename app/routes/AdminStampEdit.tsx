@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import { deleteStampImage, getStamp } from "../lib/api";
 import StampForm from "../components/StampForm";
 import type { Stamp } from "../types";

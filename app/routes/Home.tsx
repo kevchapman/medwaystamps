@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { listStamps } from "../lib/api";
 import StampPlate from "../components/StampPlate";
 import StampGrid from "../components/StampGrid";

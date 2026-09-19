@@ -1,12 +1,15 @@
 # Medway Stamps
 
-Prototype ecommerce site for rare/collectible British stamps. See [SPEC.md](./SPEC.md)
-for the full design (data model, API, scope, and what's deliberately deferred).
+Ecommerce site for rare/collectible British stamps. See [SPEC.md](./SPEC.md) for the
+full design (data model, API, scope, and what's deliberately deferred).
 
-Stack: React + TypeScript (Vite) · Hono on Cloudflare Pages Functions · Cloudflare D1
-(SQLite via Drizzle ORM) · Cloudflare R2 · Stripe Checkout (test mode).
+Stack: React + React Router v7 (SSR, Vite) · Hono, mounted in the same Cloudflare
+Worker · Cloudflare D1 (SQLite via Drizzle ORM) · Cloudflare R2 · Cloudflare KV ·
+Stripe Checkout (test mode).
 
 ## First-time setup
+
+0. **Node 22** is required (see `.nvmrc`) — `nvm use` if you use nvm.
 
 1. **Install dependencies**
    ```sh
@@ -29,7 +32,7 @@ Stack: React + TypeScript (Vite) · Hono on Cloudflare Pages Functions · Cloudf
 
 4. **Stripe test-mode keys** — copy `.dev.vars.example` to `.dev.vars` and fill in a
    [test secret key](https://dashboard.stripe.com/test/apikeys). For webhook testing
-   locally, run `stripe listen --forward-to localhost:8788/api/webhooks/stripe`
+   locally, run `stripe listen --forward-to localhost:5173/api/webhooks/stripe`
    ([Stripe CLI](https://stripe.com/docs/stripe-cli)) and put the printed signing
    secret in `.dev.vars` too.
 
@@ -38,25 +41,26 @@ Stack: React + TypeScript (Vite) · Hono on Cloudflare Pages Functions · Cloudf
    ```sh
    ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='pick something' npm run db:seed:admin:local
    ```
-   Log in at `/admin/login` once `pages:dev` is running.
+   Log in at `/admin/login` once `npm run dev` is running.
 
 ## Running locally
 
 ```sh
-npm run pages:dev
+npm run dev
 ```
 
-This starts the Vite dev server (frontend, hot-reloading) and `wrangler pages dev`
-(API routes under `functions/`, backed by local D1/R2) together, proxied on
-`http://localhost:8788`.
+One process: the Cloudflare Vite plugin runs the Worker (API + SSR) inside Vite's own
+dev server, with D1/R2/KV simulated locally via Miniflare and real HMR — at
+`http://localhost:5173`. `.dev.vars` is picked up automatically.
 
 ## Other commands
 
 | Command | Purpose |
 |---|---|
-| `npm run typecheck` | Type-check the frontend (`src/`) |
-| `npm run typecheck:functions` | Type-check the API (`functions/`) |
-| `npm run build` | Production build of the frontend into `dist/` |
+| `npm run typecheck` | Type-check everything — regenerates Worker/route types first, then `tsc -b` |
+| `npm run build` | Production build (client + server bundles) into `build/` |
+| `npm run deploy` | Build, then `wrangler deploy` (what CI runs on merge to `main`) |
+| `npm run cf-typegen` | Regenerate `worker-configuration.d.ts` after editing `wrangler.toml`'s bindings |
 | `npm run db:generate` | Generate a new Drizzle migration after editing `db/schema.ts` |
 | `npm run db:migrate:remote` | Apply migrations to the real (remote) D1 database |
 | `npm run db:seed:admin:local` / `:remote` | Create/replace the admin login (`ADMIN_EMAIL=... ADMIN_PASSWORD=...` env vars) |
@@ -67,13 +71,15 @@ This starts the Vite dev server (frontend, hot-reloading) and `wrangler pages de
 Deploys are automatic: **merging a PR into `main` deploys to production** via
 `.github/workflows/deploy.yml`. The workflow, on every push/PR, type-checks and
 builds; on push to `main` specifically it also applies pending D1 migrations and runs
-`wrangler pages deploy`. There's no manual deploy step in normal use — open a PR,
-get it merged, and it ships.
+`wrangler deploy`. There's no manual deploy step in normal use — open a PR, get it
+merged, and it ships.
 
 One-time setup for the workflow to be able to deploy: create a Cloudflare API token
 (dashboard → *My Profile → API Tokens → Create Token → Custom token*) scoped to
-this account with **Account / Cloudflare Pages / Edit** and **Account / D1 / Edit**,
-then add it as a GitHub Actions secret:
+this account with **Account / Workers Scripts / Edit** and **Account / D1 / Edit**
+(this changed from *Cloudflare Pages / Edit* when the app moved from Pages to Workers —
+if this token predates that move, its scope needs updating in the dashboard), then add
+it as a GitHub Actions secret:
 ```sh
 gh secret set CLOUDFLARE_API_TOKEN
 ```
@@ -88,15 +94,15 @@ ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='pick something' npm run db:seed:admi
 To deploy by hand instead (e.g. debugging the pipeline itself):
 ```sh
 npm run build
-npx wrangler pages deploy dist --project-name=medway-stamps --branch=main
+npx wrangler deploy
 npx wrangler d1 migrations apply medway-stamps-db --remote
 ```
 
-Stripe keys are set as Pages secrets, not via the workflow:
+Stripe keys are set as Worker secrets, not via the workflow:
 ```sh
-npx wrangler pages secret put STRIPE_SECRET_KEY
-npx wrangler pages secret put STRIPE_WEBHOOK_SECRET
+npx wrangler secret put STRIPE_SECRET_KEY
+npx wrangler secret put STRIPE_WEBHOOK_SECRET
 ```
-The webhook endpoint (`https://<your-pages-url>/api/webhooks/stripe`) is registered
+The webhook endpoint (`https://<your-worker-url>/api/webhooks/stripe`) is registered
 directly with Stripe, separately from deploys — see the Stripe dashboard's webhooks
 page for the signing secret used above.

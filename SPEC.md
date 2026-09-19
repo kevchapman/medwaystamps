@@ -19,10 +19,18 @@ Stripe test-mode checkout, end to end.
 
 **Explicitly out of scope for now** (see §8 Future phases)
 - Live payments
-- SEO/SSR — a client-rendered SPA is fine for an internal demo
 
 Admin auth and a stamp add/edit UI are now built — see §4 (`admins`/`sessions`
 tables), §5 (`/api/admin/*` routes), §6 (`/admin/*` frontend routes), and §7.
+
+The site is also mid-migration to server-rendered (SSR) pages for search-engine
+crawlability, replacing the client-only SPA — see §7's Frontend row. The platform
+migration (React Router v7 on Cloudflare Workers) is done; pages don't yet actually
+render their data server-side (every route still fetches client-side, unchanged from
+before the migration) — that, a regenerate-on-write KV cache, and sitemap/robots/meta
+(including a deliberate `noindex`/`Disallow: /` until launch is flipped on) are
+separate follow-on phases. Check recent git history for what's landed since this was
+last updated.
 
 ## 3. Assumptions
 
@@ -117,7 +125,8 @@ free-text search; facet filters (era, condition, country, price range) are plain
 
 ## 5. API
 
-All under `/api`, implemented as Hono handlers on Cloudflare Workers/Pages Functions.
+All under `/api`, implemented as Hono handlers mounted inside the same Cloudflare
+Worker that serves the site's pages.
 
 | Method | Path | Purpose |
 |---|---|---|
@@ -154,8 +163,8 @@ React + TypeScript + Vite SPA, React Router. Routes:
 
 | Layer | Choice |
 |---|---|
-| Frontend | React + TypeScript + Vite → **Cloudflare Pages** |
-| Backend | **Hono** (TypeScript) on **Cloudflare Pages Functions / Workers** |
+| Frontend | React + **React Router v7** (SSR, framework mode) → **Cloudflare Workers** |
+| Backend | **Hono** (TypeScript), mounted in the same Worker as the frontend |
 | Database | **Cloudflare D1** (SQLite) via **Drizzle ORM** |
 | Images | **Cloudflare R2** (zero egress fees) |
 | Payments | **Stripe**, test mode for this phase |
@@ -177,7 +186,6 @@ frontend or hosting.
   supports it — just no self-service way to add a second admin yet)
 - Customer accounts (still none — admin auth is separate from this)
 - Live Stripe mode + real order fulfillment workflow
-- Reconsider SSR (e.g. Next.js) if organic search for SG numbers/collector terms matters
 - Harden the reservation/concurrency logic in §4
 - Customer order history / email confirmations
 

@@ -1,5 +1,4 @@
 import { Hono } from "hono";
-import { handle } from "hono/cloudflare-pages";
 import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import { and, asc, desc, eq, gte, inArray, like, lte, or } from "drizzle-orm";
 import { getDb } from "../lib/db";
@@ -231,7 +230,7 @@ app.post("/webhooks/stripe", async (c) => {
 // ---- Admin: auth --------------------------------------------------------
 
 // Cookie is Secure whenever the request itself arrived over https — true in
-// production, false under local `wrangler pages dev` (plain http) — so the
+// production, false under local `npm run dev` (plain http) — so the
 // same code is correct in both without special-casing "localhost".
 function isHttps(c: { req: { url: string } }): boolean {
   return new URL(c.req.url).protocol === "https:";
@@ -438,4 +437,4 @@ app.delete("/admin/images/:imageId", requireAdmin, async (c) => {
   return c.json({ ok: true });
 });
 
-export const onRequest = handle(app);
+export default app;
