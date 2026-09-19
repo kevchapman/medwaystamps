@@ -1,36 +1,34 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
-import { getStamp } from "../lib/api";
+import { Link } from "react-router";
 import { formatPrice } from "../lib/format";
-import { useCart } from "../context/CartContext";
+import { apiFetch } from "../lib/apiFetch.server";
 import StampPlate from "../components/StampPlate";
 import ConditionTag from "../components/ConditionTag";
+import AddToCartControl from "../components/AddToCartControl";
 import type { Stamp } from "../types";
+import type { Route } from "./+types/StampDetail";
 import styles from "./StampDetail.module.scss";
 
-export default function StampDetail() {
-  const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { addLine } = useCart();
-  const [stamp, setStamp] = useState<Stamp | null>(null);
-  const [error, setError] = useState<string | null>(null);
+// SSR'd and cached (see app/lib/pageCache.server.ts) — this is one of the
+// two page types this migration exists for, so its HTML needs to contain
+// the real title/description/price for crawlers. `status` is deliberately
+// NOT read anywhere in this component; see AddToCartControl.
+export async function loader({ params, context }: Route.LoaderArgs) {
+  const res = await apiFetch(`/api/stamps/${params.id}`, context.cloudflare.env, context.cloudflare.ctx);
+  if (res.status === 404) throw new Response("Stamp not found", { status: 404 });
+  if (!res.ok) throw new Response("Failed to load stamp", { status: 502 });
+  return (await res.json()) as Stamp;
+}
 
-  useEffect(() => {
-    if (!id) return;
-    getStamp(id)
-      .then(setStamp)
-      .catch((err: unknown) => setError(String(err)));
-  }, [id]);
+export function meta({ data }: Route.MetaArgs) {
+  if (!data) return [{ title: "Stamp not found — Medway Stamps" }];
+  return [
+    { title: `${data.title} (${data.sgNumber}) — Medway Stamps` },
+    { name: "description", content: data.description.slice(0, 155) },
+  ];
+}
 
-  if (error)
-    return (
-      <p role="alert" className={styles.status}>
-        Couldn't load this stamp: {error}
-      </p>
-    );
-  if (!stamp) return <p className={styles.status}>Loading…</p>;
-
-  const available = stamp.status === "available";
+export default function StampDetail({ loaderData }: Route.ComponentProps) {
+  const stamp = loaderData;
 
   return (
     <section>
@@ -87,21 +85,7 @@ export default function StampDetail() {
 
           <div className={`serif ${styles.priceLarge}`}>{formatPrice(stamp.pricePence)}</div>
 
-          <button
-            className="btn"
-            disabled={!available}
-            onClick={() => {
-              addLine({
-                stampId: stamp.id,
-                title: stamp.title,
-                pricePence: stamp.pricePence,
-                quantity: 1,
-              });
-              navigate("/cart");
-            }}
-          >
-            {available ? "Add to Collection" : "Sold"}
-          </button>
+          <AddToCartControl stampId={stamp.id} title={stamp.title} pricePence={stamp.pricePence} />
           <div className={styles.footnote}>One of one &mdash; once it's gone, it's gone.</div>
         </div>
       </div>

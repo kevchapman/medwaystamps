@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router";
 import { listStamps } from "../lib/api";
+import { apiFetch } from "../lib/apiFetch.server";
 import StampGrid from "../components/StampGrid";
-import type { Stamp, StampCondition } from "../types";
+import type { Stamp, StampCondition, StampListResponse } from "../types";
+import type { Route } from "./+types/Catalog";
 import styles from "./Catalog.module.scss";
 
 const CONDITIONS: StampCondition[] = ["mint", "mounted_mint", "used", "fine_used"];
@@ -13,10 +15,29 @@ const CONDITION_LABELS: Record<StampCondition, string> = {
   fine_used: "Fine used",
 };
 
-export default function Catalog() {
+// SSR'd but NOT cached (unlike Home/StampDetail) — the search/filter
+// query-param space is effectively unbounded, so a KV entry per combination
+// doesn't converge. This still gives a real, crawlable first paint for
+// whatever URL a crawler or direct link hits, matching the request's own
+// querystring; client-side re-filtering after that keeps using the
+// existing listStamps() flow unchanged.
+export async function loader({ request, context }: Route.LoaderArgs) {
+  const url = new URL(request.url);
+  const res = await apiFetch(`/api/stamps${url.search}`, context.cloudflare.env, context.cloudflare.ctx);
+  return (await res.json()) as StampListResponse;
+}
+
+export function meta() {
+  return [
+    { title: "Catalogue — Medway Stamps" },
+    { name: "description", content: "Browse the full catalogue of rare and collectible British stamps." },
+  ];
+}
+
+export default function Catalog({ loaderData }: Route.ComponentProps) {
   const [params, setParams] = useSearchParams();
-  const [items, setItems] = useState<Stamp[]>([]);
-  const [total, setTotal] = useState(0);
+  const [items, setItems] = useState<Stamp[]>(loaderData.items);
+  const [total, setTotal] = useState(loaderData.total);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,7 +45,14 @@ export default function Catalog() {
   const era = params.get("era") ?? "";
   const condition = (params.get("condition") as StampCondition) || undefined;
 
+  // Skip the fetch on first mount — loaderData already matches the URL as
+  // it was server-rendered. Only actual filter changes after that refetch.
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setLoading(true);
     setError(null);
     listStamps({ q, era: era || undefined, condition })
