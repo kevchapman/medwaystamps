@@ -1,4 +1,4 @@
-import type { Stamp, StampListResponse, StampSearchParams } from "../types";
+import type { Admin, Stamp, StampImage, StampInput, StampListResponse, StampSearchParams } from "../types";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(path, {
@@ -37,4 +37,62 @@ export function createCheckoutSession(
     method: "POST",
     body: JSON.stringify({ lines }),
   });
+}
+
+// ---- Admin -----------------------------------------------------------
+
+export function adminLogin(email: string, password: string): Promise<Admin> {
+  return request<Admin>("/api/admin/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+}
+
+export function adminLogout(): Promise<{ ok: true }> {
+  return request<{ ok: true }>("/api/admin/logout", { method: "POST" });
+}
+
+export function getAdminMe(): Promise<Admin> {
+  return request<Admin>("/api/admin/me");
+}
+
+export function createStamp(input: StampInput): Promise<Stamp> {
+  return request<Stamp>("/api/admin/stamps", {
+    method: "POST",
+    body: JSON.stringify(input),
+  });
+}
+
+export function updateStamp(id: string, input: Partial<StampInput>): Promise<Stamp> {
+  return request<Stamp>(`/api/admin/stamps/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+}
+
+// Bypasses the request<T>() wrapper deliberately — it forces a
+// Content-Type: application/json header, which would break the browser's
+// own multipart boundary header for a FormData body.
+export async function uploadStampImage(
+  stampId: string,
+  file: File,
+  altText?: string,
+): Promise<StampImage> {
+  const form = new FormData();
+  form.set("image", file);
+  if (altText) form.set("altText", altText);
+
+  const res = await fetch(`/api/admin/stamps/${stampId}/images`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) {
+    const body = await res.text().catch(() => "");
+    throw new Error(`Image upload failed: ${res.status} ${body}`);
+  }
+  return res.json() as Promise<StampImage>;
+}
+
+export function deleteStampImage(imageId: string): Promise<{ ok: true }> {
+  return request<{ ok: true }>(`/api/admin/images/${imageId}`, { method: "DELETE" });
 }

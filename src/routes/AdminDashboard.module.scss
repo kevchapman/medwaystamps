@@ -1,0 +1,70 @@
+.page {
+  padding-block: 48px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.title {
+  font-size: 32px;
+  margin: 4px 0 0;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logoutBtn {
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.error {
+  color: var(--oxblood);
+}
+
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rowTitle {
+  font-size: 16px;
+}
+
+.rowMeta {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.rowRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+}
+
+.rowStatus {
+  text-transform: capitalize;
+  color: var(--ink-soft);
+}
+
+.rowPrice {
+  min-width: 72px;
+  text-align: right;
+}

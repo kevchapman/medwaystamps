@@ -33,6 +33,13 @@ Stack: React + TypeScript (Vite) · Hono on Cloudflare Pages Functions · Cloudf
    ([Stripe CLI](https://stripe.com/docs/stripe-cli)) and put the printed signing
    secret in `.dev.vars` too.
 
+5. **Seed the admin account** (local D1) — this is separate from `db:seed:local`
+   since it needs a real password, not sample data:
+   ```sh
+   ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='pick something' npm run db:seed:admin:local
+   ```
+   Log in at `/admin/login` once `pages:dev` is running.
+
 ## Running locally
 
 ```sh
@@ -52,6 +59,8 @@ This starts the Vite dev server (frontend, hot-reloading) and `wrangler pages de
 | `npm run build` | Production build of the frontend into `dist/` |
 | `npm run db:generate` | Generate a new Drizzle migration after editing `db/schema.ts` |
 | `npm run db:migrate:remote` | Apply migrations to the real (remote) D1 database |
+| `npm run db:seed:admin:local` / `:remote` | Create/replace the admin login (`ADMIN_EMAIL=... ADMIN_PASSWORD=...` env vars) |
+| `npm run db:pull:remote` | Pull production's stamp catalog + images down into local D1/R2 (one-way; never touches admin accounts) |
 
 ## Deploying
 
@@ -69,6 +78,12 @@ then add it as a GitHub Actions secret:
 gh secret set CLOUDFLARE_API_TOKEN
 ```
 (paste the token when prompted — this never needs to touch `.dev.vars` or git).
+
+**Seeding the production admin account is a manual, one-time step** — like
+`db:seed:remote`, it's never run automatically by the deploy workflow:
+```sh
+ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='pick something' npm run db:seed:admin:remote
+```
 
 To deploy by hand instead (e.g. debugging the pipeline itself):
 ```sh

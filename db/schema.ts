@@ -62,6 +62,28 @@ export const orderItems = sqliteTable("order_items", {
   quantity: integer("quantity").notNull().default(1),
 });
 
+export const admins = sqliteTable("admins", {
+  id: text("id").primaryKey(),
+  email: text("email").notNull().unique(),
+  // Self-describing so the algorithm/iteration count can change later
+  // without a migration: "pbkdf2-sha256$<iterations>$<saltB64>$<hashB64>".
+  // See functions/lib/crypto.ts.
+  passwordHash: text("password_hash").notNull(),
+  createdAt: integer("created_at").notNull(),
+});
+
+export const sessions = sqliteTable("sessions", {
+  id: text("id").primaryKey(),
+  // SHA-256 hex of the raw session token — never the raw token itself, so a
+  // DB read/leak alone can't be replayed as a session cookie.
+  tokenHash: text("token_hash").notNull().unique(),
+  adminId: text("admin_id")
+    .notNull()
+    .references(() => admins.id),
+  expiresAt: integer("expires_at").notNull(),
+  createdAt: integer("created_at").notNull(),
+});
+
 // NOTE: free-text search (title/description/sg_number) is intended to run
 // via a SQLite FTS5 virtual table per SPEC.md §4. Drizzle doesn't model
 // virtual tables directly — that table is created in a raw-SQL migration,

@@ -1,3 +1,11 @@
+// Real uploaded photo, shown instead of StampPlate once a stamp has one —
+// sized to fill the same .plate-frame footprint the placeholder occupies.
+.photo {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .body {
   display: flex;
   flex-direction: column;

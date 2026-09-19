@@ -11,7 +11,15 @@ export default function StampCard({ stamp }: { stamp: Stamp }) {
   return (
     <Link to={`/stamps/${stamp.id}`} className="stamp-card">
       <div className="plate-frame">
-        <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} />
+        {stamp.images[0] ? (
+          <img
+            src={stamp.images[0].url}
+            alt={stamp.images[0].altText ?? stamp.title}
+            className={styles.photo}
+          />
+        ) : (
+          <StampPlate sgNumber={stamp.sgNumber} era={stamp.era} issueYear={stamp.issueYear} />
+        )}
       </div>
       <div className={styles.body}>
         <div className="eyebrow">

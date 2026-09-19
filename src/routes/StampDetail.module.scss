@@ -24,6 +24,12 @@
   align-items: flex-start;
 }
 
+.photo {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 .plateCol {
   flex: 0 0 420px;
   display: flex;
