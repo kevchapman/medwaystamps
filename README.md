@@ -91,6 +91,11 @@ gh secret set CLOUDFLARE_API_TOKEN
 ADMIN_EMAIL=you@example.com ADMIN_PASSWORD='pick something' npm run db:seed:admin:remote
 ```
 
+**The site stays deliberately unindexed by search engines until launch.**
+`wrangler.toml`'s `[vars] ALLOW_INDEXING = "false"` drives a blanket `Disallow: /` in
+`robots.txt` plus an `X-Robots-Tag: noindex` header on every response. When actually
+ready to launch, flip it to `"true"` in its own PR — not bundled into a feature change.
+
 To deploy by hand instead (e.g. debugging the pipeline itself):
 ```sh
 npm run build

@@ -7,6 +7,8 @@ import { type RouteConfig, index, layout, route } from "@react-router/dev/routes
 // exactly as it did before, via app/lib/api.ts.
 export default [
   index("routes/Home.tsx"),
+  route("/sitemap.xml", "routes/sitemap.tsx"),
+  route("/robots.txt", "routes/robots.tsx"),
   route("/catalog", "routes/Catalog.tsx"),
   route("/stamps/:id", "routes/StampDetail.tsx"),
   route("/cart", "routes/Cart.tsx"),
