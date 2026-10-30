@@ -319,6 +319,9 @@ function normalizeStampInput(body: StampInputBody) {
     if (body[field] !== undefined) out[field] = body[field];
   }
   if (body.grade !== undefined) out.grade = body.grade === "" ? null : body.grade;
+  if (body.specialisedNumber !== undefined) {
+    out.specialisedNumber = body.specialisedNumber === "" ? null : body.specialisedNumber;
+  }
   for (const field of ["issueYear", "issueYearEnd", "pricePence", "quantity"]) {
     if (body[field] !== undefined) out[field] = body[field] === null ? null : Number(body[field]);
   }

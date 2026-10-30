@@ -56,6 +56,7 @@ actually ready to be crawled.
 | issue_year | integer | nullable |
 | issue_year_end | integer | nullable — for issues spanning a range |
 | sg_number | text | Stanley Gibbons catalog reference |
+| specialised_number | text | nullable — free-text specialised-catalogue reference, distinct from the SG number |
 | condition | text | enum: `mint`, `mounted_mint`, `used`, `fine_used` |
 | grade | text | nullable, free text e.g. "fine", "very fine" |
 | price_pence | integer | price in minor currency unit |

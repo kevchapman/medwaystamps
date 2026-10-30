@@ -1,0 +1,1 @@
+ALTER TABLE `stamps` ADD `specialised_number` text;

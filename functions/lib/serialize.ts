@@ -18,6 +18,7 @@ export function toStampDTO(
     issueYear: stamp.issueYear,
     issueYearEnd: stamp.issueYearEnd,
     sgNumber: stamp.sgNumber,
+    specialisedNumber: stamp.specialisedNumber,
     condition: stamp.condition,
     grade: stamp.grade,
     pricePence: stamp.pricePence,
