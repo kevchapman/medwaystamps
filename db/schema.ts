@@ -9,6 +9,7 @@ export const stamps = sqliteTable("stamps", {
   issueYear: integer("issue_year"),
   issueYearEnd: integer("issue_year_end"),
   sgNumber: text("sg_number").notNull(),
+  specialisedNumber: text("specialised_number"),
   // condition: 'mint' | 'mounted_mint' | 'used' | 'fine_used'
   condition: text("condition").notNull(),
   grade: text("grade"),

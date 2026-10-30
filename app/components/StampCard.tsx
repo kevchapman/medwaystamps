@@ -28,6 +28,7 @@ export default function StampCard({ stamp }: { stamp: Stamp }) {
         <div className={`serif ${styles.title}`}>{stamp.title}</div>
         <div className="meta-row">
           <span>{stamp.sgNumber}</span>
+          {stamp.specialisedNumber && <span>{stamp.specialisedNumber}</span>}
           <ConditionTag condition={stamp.condition} />
           {stamp.grade && <span>{stamp.grade}</span>}
         </div>

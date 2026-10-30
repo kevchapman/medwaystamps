@@ -31,6 +31,7 @@ export default function StampForm({ mode, initial, onSaved }: StampFormProps) {
   const [issueYear, setIssueYear] = useState(initial?.issueYear?.toString() ?? "");
   const [issueYearEnd, setIssueYearEnd] = useState(initial?.issueYearEnd?.toString() ?? "");
   const [sgNumber, setSgNumber] = useState(initial?.sgNumber ?? "");
+  const [specialisedNumber, setSpecialisedNumber] = useState(initial?.specialisedNumber ?? "");
   const [condition, setCondition] = useState<StampCondition>(initial?.condition ?? "mint");
   const [grade, setGrade] = useState(initial?.grade ?? "");
   const [price, setPrice] = useState(initial ? (initial.pricePence / 100).toFixed(2) : "");
@@ -65,6 +66,7 @@ export default function StampForm({ mode, initial, onSaved }: StampFormProps) {
       issueYear: issueYear === "" ? null : Number(issueYear),
       issueYearEnd: issueYearEnd === "" ? null : Number(issueYearEnd),
       sgNumber,
+      specialisedNumber: specialisedNumber === "" ? null : specialisedNumber,
       condition,
       grade: grade === "" ? null : grade,
       pricePence: Math.round(Number(price || "0") * 100),
@@ -147,6 +149,15 @@ export default function StampForm({ mode, initial, onSaved }: StampFormProps) {
         <label className={styles.field}>
           <span className="eyebrow">SG number</span>
           <input className="field" value={sgNumber} onChange={(e) => setSgNumber(e.target.value)} required />
+        </label>
+
+        <label className={styles.field}>
+          <span className="eyebrow">Specialised number</span>
+          <input
+            className="field"
+            value={specialisedNumber}
+            onChange={(e) => setSpecialisedNumber(e.target.value)}
+          />
         </label>
 
         <label className={styles.field}>

@@ -17,6 +17,7 @@ export interface Stamp {
   issueYear: number | null;
   issueYearEnd: number | null;
   sgNumber: string;
+  specialisedNumber: string | null;
   condition: StampCondition;
   grade: string | null;
   pricePence: number;
@@ -62,6 +63,7 @@ export interface StampInput {
   issueYear: number | null;
   issueYearEnd: number | null;
   sgNumber: string;
+  specialisedNumber: string | null;
   condition: StampCondition;
   grade: string | null;
   pricePence: number;

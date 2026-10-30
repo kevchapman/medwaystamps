@@ -67,6 +67,12 @@ export default function StampDetail({ loaderData }: Route.ComponentProps) {
               <span className="eyebrow">SG Number</span>
               <span className={styles.specValue}>{stamp.sgNumber}</span>
             </div>
+            {stamp.specialisedNumber && (
+              <div className="spec-row">
+                <span className="eyebrow">Specialised Number</span>
+                <span className={styles.specValue}>{stamp.specialisedNumber}</span>
+              </div>
+            )}
             <div className="spec-row">
               <span className="eyebrow">Country</span>
               <span className={styles.specValue}>{stamp.country}</span>
